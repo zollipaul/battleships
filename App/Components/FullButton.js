@@ -12,8 +12,6 @@ import ExamplesRegistry from '../Services/ExamplesRegistry'
 /* istanbul ignore next */
 ExamplesRegistry.addComponentExample('Full Button', () =>
   <FullButton
-    text='Hey there'
-    onPress={() => window.alert('Full Button Pressed!')}
   />
 )
 

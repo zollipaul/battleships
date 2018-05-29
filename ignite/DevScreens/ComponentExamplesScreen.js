@@ -21,6 +21,9 @@ class ComponentExamplesScreen extends React.Component {
   }
 
   render () {
+
+    console.log(this.props.navigation)
+
     return (
       <View style={[styles.container, styles.mainContainer]}>
         <Image source={Images.background} style={styles.backgroundImage} resizeMode='stretch' />

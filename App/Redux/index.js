@@ -8,7 +8,14 @@ import ReduxPersist from '../Config/ReduxPersist'
 export const reducers = combineReducers({
   nav: require('./NavigationRedux').reducer,
   github: require('./GithubRedux').reducer,
-  search: require('./SearchRedux').reducer
+  search: require('./SearchRedux').reducer,
+  gameGrid: require('./GameGridRedux').reducer,
+  players: require('./PlayersRedux').reducer,
+  games: require('./GamesRedux').reducer,
+  gameView: require('./GameViewRedux').reducer,
+  leaderboard: require('./LeaderboardRedux').reducer,
+  activeGamePlayerId: require('./ManageGameRedux').reducer,
+  ships: require('./ShipsRedux').reducer
 })
 
 export default () => {

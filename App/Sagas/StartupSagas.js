@@ -18,7 +18,7 @@ export function * startup (action) {
     })
 
     // fully customized!
-    const subObject = { a: 1, b: [1, 2, 3], c: true }
+    const subObject = {a: 1, b: [1, 2, 3], c: true}
     subObject.circularDependency = subObject // osnap!
     console.tron.display({
       name: '🔥 IGNITE 🔥',
@@ -32,6 +32,9 @@ export function * startup (action) {
       }
     })
   }
+
+  // yield put(GamesActions.getGamesRequest())
+
   const avatar = yield select(selectAvatar)
   // only get if we don't have it yet
   if (!is(String, avatar)) {

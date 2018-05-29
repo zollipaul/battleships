@@ -1,32 +1,181 @@
-import React, { Component } from 'react'
-import { ScrollView, Text, Image, View } from 'react-native'
-import DevscreensButton from '../../ignite/DevScreens/DevscreensButton.js'
-
-import { Images } from '../Themes'
+import React, { Component } from "react";
+import {
+  FlatList,
+  TouchableOpacity,
+  Text,
+  View
+} from "react-native";
+import { connect } from "react-redux";
+import GameListItem from "./GameListItem";
+import PlayersActions from "../Redux/PlayersRedux";
+import GamesActions from "../Redux/GamesRedux";
+import ManageGameActions from "../Redux/ManageGameRedux";
+import LoginAndSignUp from "../Components/LoginAndSignUp";
+import Icon from "react-native-vector-icons/FontAwesome";
 
 // Styles
-import styles from './Styles/LaunchScreenStyles'
+import styles from "./Styles/LaunchScreenStyles";
+import { Colors } from "../Themes";
 
-export default class LaunchScreen extends Component {
-  render () {
-    return (
-      <View style={styles.mainContainer}>
-        <Image source={Images.background} style={styles.backgroundImage} resizeMode='stretch' />
-        <ScrollView style={styles.container}>
-          <View style={styles.centered}>
-            <Image source={Images.launch} style={styles.logo} />
-          </View>
+// More info here: https://facebook.github.io/react-native/docs/flatlist.html
 
-          <View style={styles.section} >
-            <Image source={Images.ready} />
-            <Text style={styles.sectionText}>
-              This probably isn't what your app is going to look like. Unless your designer handed you this screen and, in that case, congrats! You're ready to ship. For everyone else, this is where you'll see a live preview of your fully functioning app using Ignite.
-            </Text>
-          </View>
+class LaunchScreen extends Component {
+  /************************************************************
+   * STEP 1
+   * This is an array of objects with the properties you desire
+   * Usually this should come from Redux mapStateToProps
+   *************************************************************/
 
-          <DevscreensButton />
-        </ScrollView>
-      </View>
-    )
+  constructor(props) {
+    super(props);
+    this.state = {
+      userName: "",
+      password: ""
+    };
   }
+
+  componentDidMount() {
+    this.props.getGames();
+  }
+
+  // class GamesFlatList extends React.PureComponent { --> why not use purecomponent
+
+  /************************************************************
+   * STEP 2
+   * `renderRow` function. How each cell/row should be rendered
+   * It's our best practice to place a single component here:
+   *
+   * e.g.
+   return <MyCustomCell title={item.title} description={item.description} />
+   *************************************************************/
+
+  renderRow = ({ item }) => {
+    return (
+      <GameListItem
+        item={item}
+        currentUser={this.props.games.currentUser}
+        changeGame={this.props.changeGame}
+        joinGame={this.props.joinGame}
+      />
+    );
+  };
+
+  /************************************************************
+   * STEP 3
+   * Consider the configurations we've set below.  Customize them
+   * to your liking!  Each with some friendly advice.
+   *************************************************************/
+  // // Render a header?
+  // renderHeader = () => (
+  //   <Text style={[styles.label, styles.sectionHeader]}>Games</Text>
+  // );
+
+  // Render a footer?
+  renderFooter = () => (
+    <Text style={[styles.label, styles.sectionHeader]}> - Footer - </Text>
+  );
+
+  // Show this when data is empty
+  renderEmpty = () => (
+    <Text style={styles.label}> - Nothing to See Here - </Text>
+  );
+
+  renderSeparator = () => <Text style={styles.label}> ~~~~~ </Text>;
+
+  // The default function if no Key is provided is index
+  // an identifiable key is important if you plan on
+  // item reordering.  Otherwise index is fine
+  keyExtractor = item => String(item.id);
+
+  // How many items should be kept im memory as we scroll?
+  oneScreensWorth = 20;
+
+  // extraData is for anything that is not indicated in data
+  // for instance, if you kept "favorites" in `this.state.favs`
+  // pass that in, so changes in favorites will cause a re-render
+  // and your renderItem will have access to change depending on state
+  // e.g. `extraData`={this.state.favs}
+
+  // Optimize your list if the height of each item can be calculated
+  // by supplying a constant height, there is no need to measure each
+  // item after it renders.  This can save significant time for lists
+  // of a size 100+
+  // e.g. itemLayout={(data, index) => (
+  //   {length: ITEM_HEIGHT, offset: ITEM_HEIGHT * index, index}
+  // )}
+
+  render() {
+    return this.props.games !== null ? (
+      <View style={styles.container}>
+        {this.renderLoginAndSignUp()}
+        <FlatList
+          contentContainerStyle={styles.listContent}
+          data={this.props.games.games}
+          renderItem={this.renderRow}
+          keyExtractor={this.keyExtractor}
+          initialNumToRender={this.oneScreensWorth}
+          // ListHeaderComponent={this.renderHeader}
+          /*
+            ListFooterComponent={this.renderFooter}
+  */
+          ListEmptyComponent={this.renderEmpty}
+          ItemSeparatorComponent={this.renderSeparator}
+        />
+        <TouchableOpacity
+          onPress={() => {
+            this.props.createGame();
+          }}
+        >
+          <Icon name="plus" size={40} color={Colors.snow} />
+        </TouchableOpacity>
+        )
+        {/*<DevscreensButton />*/}
+      </View>
+    ) : (
+      <Text>Loading</Text>
+    );
+  }
+
+  login = (userName, password) => {
+    this.props.loginPlayer({ userName: userName, password: password });
+  };
+  signUp = (userName, password) => {
+    this.props.signUpPlayer({ userName: userName, password: password });
+  };
+
+  renderLoginAndSignUp = () => {
+    return this.props.games.currentUser === null ? (
+      <LoginAndSignUp login={this.login} signUp={this.signUp} />
+    ) : null;
+  };
 }
+
+const mapStateToProps = state => {
+  return {
+    games: state.games.payload
+  };
+};
+const mapDispatchToProps = dispatch => {
+  return {
+    getGames: () => {
+      dispatch(GamesActions.getGamesRequest());
+    },
+    createGame: () => {
+      dispatch(ManageGameActions.createGameRequest());
+    },
+    joinGame: data => {
+      dispatch(ManageGameActions.joinGameRequest(data));
+    },
+    changeGame: payload => {
+      dispatch(ManageGameActions.changeGame(payload));
+    },
+    loginPlayer: data => {
+      dispatch(PlayersActions.loginPlayerRequest(data));
+    },
+    signUpPlayer: data => {
+      dispatch(PlayersActions.signUpPlayerRequest(data));
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(LaunchScreen);

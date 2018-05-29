@@ -27,6 +27,11 @@ const ApplicationStyles = {
       margin: Metrics.section,
       padding: Metrics.baseMargin
     },
+    sectionHeader: {
+      ...Fonts.style.h5,
+      marginVertical: Metrics.doubleBaseMargin,
+      color: Colors.text
+    },
     sectionText: {
       ...Fonts.style.normal,
       paddingVertical: Metrics.doubleBaseMargin,
