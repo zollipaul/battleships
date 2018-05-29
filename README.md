@@ -1,5 +1,5 @@
-#  salvoReact
-[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](http://standardjs.com/)
+#  BattleShips Game
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
 * Standard compliant React Native App Utilizing [Ignite](https://github.com/infinitered/ignite)
 
