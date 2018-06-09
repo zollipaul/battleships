@@ -1,13 +1,12 @@
 import React, { Component } from "react";
 import { PanResponder, Animated } from "react-native";
 import { connect } from "react-redux";
-// Add Actions - replace 'Your' with whatever your reducer is called :)
-// import YourActions from '../Redux/YourRedux'
-
-// Styles
-import styles from "./Styles/ShipStyle";
-import { Metrics } from "../Themes/";
 import ShipActions from "../Redux/ShipsRedux";
+import getChars from "../Data/getChars";
+
+// Styles & Metrics
+import styles from "./Styles/ShipStyle";
+import { Metrics, Images } from "../Themes/";
 
 class Ship extends Component {
   constructor(props) {
@@ -33,20 +32,17 @@ class Ship extends Component {
     this.panResponder = PanResponder.create({
       // Ask to be the responder:
       onStartShouldSetPanResponder: (e, gesture) => true,
-
       // invoked, when access to element is granted aka is touched
       onPanResponderGrant: (e, gesture) => {
         // console.log(this.state.pan)
         this.state.pan.extractOffset();
         this.state.pan.setValue({ x: 0, y: 0 });
       },
-
       // ignore first argument, only interested in second argument, which updates Animated View location
       onPanResponderMove: Animated.event([
         null,
         { dx: this.state.pan.x, dy: this.state.pan.y }
       ]),
-
       onPanResponderRelease: (e, gesture) => {
         const horizontal = this.props.ships.data[this.state.id].horizontal;
         const prevShipXLocation = this.props.ships.data[this.state.id]
@@ -93,24 +89,8 @@ class Ship extends Component {
         const sluY = shipYLocation * squareLength + py;
         // console.log(sluX, sluY)
 
-        // calculate dropZone below gameGrid
-        const dropZoneY = py + height;
-        // console.log("dropZoneY:" + dropZoneY);
-
-        if (luY > dropZoneY && luY < Metrics.screenHeight) {
-          console.log("ship in DropZone");
-          Animated.timing(this.state.pan, {
-            toValue: { x: luX - luX0, y: luY - luY0 },
-            duration: 200,
-            delay: 0
-          }).start(() => (this._lastPos = this._val));
-
-          // reset ship in store
-          this.resetShip();
-        }
-
         // detect if touch without movement, then rotate ship
-        else if (gesture.moveX === 0 && gesture.moveY === 0) {
+        if (this.shipTouched(gesture)) {
           console.log("ship touched");
           const {
             shipXLocationAfterRotation,
@@ -138,9 +118,7 @@ class Ship extends Component {
             }).start(this.state.swing.setValue(0));
           } else {
             console.log("ship 90 deg rotation");
-            // spin rotation for 90 degrees
             this.setState({ nextRotationIsSpin: true });
-
             Animated.parallel([
               Animated.timing(this.state.spin, {
                 toValue: horizontal ? 1 : 0,
@@ -150,7 +128,6 @@ class Ship extends Component {
             ]).start(() => {
               // console.log("after spin: "+ this.state.spin._value)
               this._lastPos = this._val;
-
               this.pushShip(
                 shipXLocationAfterRotation,
                 shipYLocationAfterRotation,
@@ -169,11 +146,17 @@ class Ship extends Component {
           )
         ) {
           console.log("ship back to starting position");
-          Animated.timing(this.state.pan, {
-            toValue: { x: this._lastPos.x * -1, y: this._lastPos.y * -1 },
-            duration: 200,
-            delay: 0
-          }).start(() => (this._lastPos = this._val));
+          Animated.parallel([
+            Animated.timing(this.state.pan, {
+              toValue: { x: this._lastPos.x * -1, y: this._lastPos.y * -1 },
+              duration: 200,
+              delay: 0
+            }),
+            Animated.timing(this.state.spin, {
+              toValue: 0,
+              duration: 200
+            })
+          ]).start(() => (this._lastPos = this._val));
 
           // reset ship in store
           this.resetShip();
@@ -194,6 +177,10 @@ class Ship extends Component {
       }
     });
   }
+
+  shipTouched = gesture => {
+    return gesture.moveX === 0 && gesture.moveY === 0;
+  };
 
   componentWillUnmount() {
     this.state.pan.removeAllListeners();
@@ -243,18 +230,6 @@ class Ship extends Component {
   calculateLocationsArray = (shipXLocation, shipYLocation, horizontal) => {
     const size = this.props.ship.size;
     let shipLocations = [];
-    let getChars = {
-      1: "A",
-      2: "B",
-      3: "C",
-      4: "D",
-      5: "E",
-      6: "F",
-      7: "G",
-      8: "H",
-      9: "I",
-      10: "J"
-    };
 
     for (let i = 0; i < size; i++) {
       shipLocations.push(
@@ -345,7 +320,6 @@ class Ship extends Component {
     const spin = this.state.spin.interpolate({
       inputRange: [0, 1],
       outputRange: ["0deg", "90deg"]
-      // extrapolate: 'clamp'
     });
 
     const swing = this.state.swing.interpolate({
@@ -354,7 +328,6 @@ class Ship extends Component {
         ? ["0deg", "15deg", "-10deg", "5deg", "-5deg", "0deg"]
         : ["90deg", "105deg", "80deg", "95deg", "85deg", "90deg"]
     });
-
     return this.state.nextRotationIsSpin ? spin : swing;
   };
 
@@ -373,10 +346,14 @@ class Ship extends Component {
       ]
     };
 
+    const shipType = this.props.ship.type;
+
     return (
-      <Animated.View
+      <Animated.Image
         {...this.panResponder.panHandlers}
-        style={[panStyle, styles[this.props.ship.type]]}
+        source={Images[shipType]}
+        style={[panStyle, styles[shipType]]}
+        resizeMode="cover"
       />
     );
   }

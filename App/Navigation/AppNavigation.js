@@ -1,5 +1,6 @@
 import React from 'react'
 import { TabNavigator, TabBarBottom } from 'react-navigation'
+import WaitingForOpponent from '../Containers/WaitingForOpponentScreen'
 import LaunchScreenNavigation from './LaunchScreenNavigation'
 import GameScreenStack from './GameScreenNavigation'
 import LeaderboardScreen from '../Containers/LeaderboardScreen'

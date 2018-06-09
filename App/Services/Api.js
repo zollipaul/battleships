@@ -77,6 +77,10 @@ const create = (baseURL = "http://localhost:8080/api/") => {
     api.post("/games/players/" + gamePlayerId + "/ships", ships, {
       headers: { "content-type": "application/json" }
     });
+  const postSalvoes = (gamePlayerId, salvoes) =>
+    api.post("/games/players/" + gamePlayerId + "/salvoes", salvoes, {
+      headers: { "content-type": "application/json" }
+    });
 
   // ------
   // STEP 3
@@ -105,7 +109,8 @@ const create = (baseURL = "http://localhost:8080/api/") => {
     getLeaderboard,
     createGame,
     joinGame,
-    postShips
+    postShips,
+    postSalvoes
   };
 };
 

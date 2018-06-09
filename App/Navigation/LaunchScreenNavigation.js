@@ -1,8 +1,8 @@
 import React from "react";
 import { StackNavigator } from "react-navigation";
 import LaunchScreen from "../Containers/LaunchScreen";
-import Header from '../Containers/Header'
-
+import Header from "../Containers/Header";
+import WaitingForOpponent from "../Containers/WaitingForOpponentScreen";
 
 const LaunchScreenNavigation = StackNavigator(
   {
@@ -13,7 +13,7 @@ const LaunchScreenNavigation = StackNavigator(
 
   {
     navigationOptions: ({ navigation, screenProps }) => ({
-      header: <Header navigation={navigation} screenProps={screenProps}/>,
+      header: <Header navigation={navigation} screenProps={screenProps} />,
       swipeEnabled: false,
       initialRoute: LaunchScreen
     })

@@ -7,8 +7,13 @@ export default StyleSheet.create({
     borderRadius: 5,
     marginHorizontal: Metrics.section,
     marginVertical: Metrics.baseMargin,
-    backgroundColor: Colors.fire,
     justifyContent: 'center'
+  },
+  active: {
+    backgroundColor: Colors.fire,
+  },
+  inactive: {
+    backgroundColor: Colors.charcoal,
   },
   buttonText: {
     color: Colors.snow,

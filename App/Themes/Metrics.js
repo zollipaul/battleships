@@ -18,6 +18,7 @@ const metrics = {
 
   placingShipsGridWidth: width* 0.9,
   placingShipsSquareLength: width*0.9 * 0.0905,
+  borderRadius: width*0.9 * 0.0905 / 2,
 
   gamePlayPlayerGridWidth: width *0.6,
   gamePlayPlayerSquareLength: width*0.6* 0.0905,

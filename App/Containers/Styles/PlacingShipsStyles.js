@@ -6,15 +6,5 @@ export default StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.background,
-  },
-  centered: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  grid: {
-    width: Metrics.placingShipsGridWidth,
-    flexDirection: "row",
-    flexWrap: "wrap",
-    marginTop: 20,
-  },
+  }
 })

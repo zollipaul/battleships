@@ -28,8 +28,7 @@ import {
 import { getGames } from "./GamesSagas";
 import { getGameView } from "./GameViewSagas";
 import { getLeaderboard } from "./LeaderboardSagas";
-import { createGame, changeGame, joinGame} from "./ManageGameSagas";
-import { postShips} from './ShipsSagas'
+import { createGame, changeGame, joinGame, startGame, watchEndOfTurn } from "./ManageGameSagas";
 
 /* ------------- API ------------- */
 
@@ -46,7 +45,7 @@ export default function* root() {
     takeLatest(StartupTypes.STARTUP, startup),
 
     // some sagas receive extra parameters in addition to an action
-    takeLatest(GithubTypes.USER_REQUEST, getUserAvatar, api),
+    // takeLatest(GithubTypes.USER_REQUEST, getUserAvatar, api),
     takeLatest(PlayersTypes.GET_PLAYERS_REQUEST, getPlayers, api),
     takeLatest(PlayersTypes.LOGIN_PLAYER_REQUEST, loginPlayer, api),
     takeLatest(PlayersTypes.LOGOUT_PLAYER_REQUEST, logoutPlayer, api),
@@ -56,12 +55,12 @@ export default function* root() {
     takeLatest(ManageGameTypes.CREATE_GAME_REQUEST, createGame, api),
     takeEvery(ManageGameTypes.CHANGE_GAME, changeGame),
     takeLatest(ManageGameTypes.JOIN_GAME_REQUEST, joinGame, api),
+    takeLatest(ManageGameTypes.START_GAME_REQUEST, startGame, api),
 
     takeLatest(GameViewTypes.GAME_VIEW_REQUEST, getGameView, api),
     takeLatest(LeaderboardTypes.LEADERBOARD_REQUEST, getLeaderboard, api),
 
-    takeLatest(ShipsTypes.POST_SHIPS_REQUEST, postShips, api),
-
+    takeLatest(ManageGameTypes.START_GAME_SUCCESS, watchEndOfTurn, api),
 
   ]);
 }

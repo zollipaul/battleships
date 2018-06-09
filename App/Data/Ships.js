@@ -1,5 +1,6 @@
 export default {
   "1": {
+    id: "1",
     coordinates: {
       shipXLocation: 0,
       shipYLocation: 0
@@ -10,6 +11,7 @@ export default {
     location: []
   },
   "2": {
+    id: "2",
     coordinates: {
       shipXLocation: 0,
       shipYLocation: 0
@@ -20,6 +22,7 @@ export default {
     location: []
   },
   "3": {
+    id: "3",
     coordinates: {
       shipXLocation: 0,
       shipYLocation: 0
@@ -30,6 +33,7 @@ export default {
     location: []
   },
   "4": {
+    id: "4",
     coordinates: {
       shipXLocation: 0,
       shipYLocation: 0
@@ -40,6 +44,7 @@ export default {
     location: []
   },
   "5": {
+    id: "5",
     coordinates: {
       shipXLocation: 0,
       shipYLocation: 0

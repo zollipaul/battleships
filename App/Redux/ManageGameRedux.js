@@ -13,6 +13,15 @@ const { Types, Creators } = createActions({
   joinGameRequest: ["data"],
   joinGameSuccess: ["payload"],
   joinGameFailure: null,
+
+  startGameRequest: ["data"],
+  startGameSuccess: ["payload"],
+  startGameFailure: null,
+
+  endTurnRequest: ["data"],
+  endTurnSuccess: ["payload"],
+  endTurnFailure: null,
+
 });
 
 export const ManageGameTypes = Types;
@@ -30,7 +39,12 @@ export const INITIAL_STATE = Immutable({
 /* ------------- Selectors ------------- */
 
 export const ManageGameReduxSelectors = {
-  getData: state => state.data
+  getShips: state => {
+    return state.ships.data
+  },
+  getSalvoes: state => {
+    return state.salvoes
+  }
 };
 
 /* ------------- Reducers ------------- */
@@ -54,6 +68,7 @@ export const changeGame = (state, action) => {
   return state.merge({ payload });
 };
 
+
 /* ------------- Hookup Reducers To Types ------------- */
 
 export const reducer = createReducer(INITIAL_STATE, {
@@ -66,4 +81,12 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.JOIN_GAME_REQUEST]: request,
   [Types.JOIN_GAME_SUCCESS]: success,
   [Types.JOIN_GAME_FAILURE]: failure,
+
+  [Types.START_GAME_REQUEST]: request,
+  [Types.START_GAME_SUCCESS]: success,
+  [Types.START_GAME_FAILURE]: failure,
+
+  [Types.END_TURN_REQUEST]: request,
+  [Types.END_TURN_SUCCESS]: success,
+  [Types.END_TURN_FAILURE]: failure,
 });

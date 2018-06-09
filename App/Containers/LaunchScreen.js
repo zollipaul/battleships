@@ -6,7 +6,7 @@ import {
   View
 } from "react-native";
 import { connect } from "react-redux";
-import GameListItem from "./GameListItem";
+import GameListItem from "../Components/GameListItem";
 import PlayersActions from "../Redux/PlayersRedux";
 import GamesActions from "../Redux/GamesRedux";
 import ManageGameActions from "../Redux/ManageGameRedux";

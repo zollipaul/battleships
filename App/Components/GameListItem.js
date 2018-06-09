@@ -31,29 +31,31 @@ class GameListItem extends Component {
     const currentUser = this.props.currentUser;
     let gamePlayerIdOfCurrentUser = null;
     if (currentUser !== null) {
-      game.gamePlayers.forEach(gp => {
-        if (gp.player.id === currentUser.id) {
-          gamePlayerIdOfCurrentUser = gp.id;
+      game.gamePlayers.forEach(gamePlayer => {
+        if (gamePlayer.player.id === currentUser.id) {
+          gamePlayerIdOfCurrentUser = gamePlayer.id;
         }
       });
     }
 
-    const gameHasCurrentPlayer = gamePlayerIdOfCurrentUser !== null
-    const gameCanBeJoined = game.gamePlayers.length === 1
+    const gameHasCurrentPlayer = gamePlayerIdOfCurrentUser !== null;
+    const gameCanBeJoined = (game.gamePlayers.length === 1) && (!gameHasCurrentPlayer);
 
     const style = gameHasCurrentPlayer
-      ? styles.canBeChanged : gameCanBeJoined ? styles.canBeJoined
-      : styles.cannotBeChangedOrJoined;
+      ? styles.canBeChanged
+      : gameCanBeJoined
+        ? styles.canBeJoined
+        : styles.cannotBeChangedOrJoined;
 
     return (
       <TouchableOpacity
         style={style}
         onPress={() => {
           if (gameHasCurrentPlayer) {
-            this.props.changeGame(gamePlayerIdOfCurrentUser)
+            this.props.changeGame(gamePlayerIdOfCurrentUser);
           }
           if (gameCanBeJoined) {
-            this.props.joinGame(game.id)
+            this.props.joinGame(game.id);
           }
         }}
         disabled={!gameHasCurrentPlayer && !gameCanBeJoined}

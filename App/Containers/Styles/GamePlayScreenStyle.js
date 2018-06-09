@@ -11,16 +11,23 @@ export default StyleSheet.create({
     flex: 1,
     alignItems: 'center',
   },
+  gameGridPlayerAndOpponentShips: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
   playerGrid: {
     width: Metrics.gamePlayPlayerGridWidth,
     flexDirection: "row",
     flexWrap: "wrap",
-    marginTop: 20,
+    marginTop: 5,
+    backgroundColor: Colors.eggplant,
   },
   opponentGrid: {
     width: Metrics.gamePlayOpponentGridWidth,
     flexDirection: "row",
     flexWrap: "wrap",
     marginTop: 15,
+    backgroundColor: Colors.eggplant,
   },
 })

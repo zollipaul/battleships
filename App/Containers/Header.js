@@ -30,6 +30,10 @@ class Header extends Component {
       );
   };
 
+  measureHeader = event => {
+    console.log(event.nativeEvent.layout)
+  }
+
   render() {
     if (this.props.games !== null) {
       // Logged out
@@ -73,7 +77,7 @@ class Header extends Component {
       // PlacingShips
       if (this.state.routeName === "PlacingShipsScreen" && this.props.gameView.payload) {
         return (
-          <View style={styles.headerLoggedOutOrPlacingShips}>
+          <View style={styles.headerLoggedOutOrPlacingShips} onLayout={this.measureHeader}>
             <View style={styles.titleView}>
               <Text style={styles.headerTitle}>
                 {this.renderTitleOfGameScreens()}
@@ -93,8 +97,7 @@ class Header extends Component {
 const mapStateToProps = state => {
   return {
     games: state.games.payload,
-    gameView: state.gameView,
-    nav: state.nav
+    gameView: state.gameView
   };
 };
 

@@ -24,7 +24,8 @@ export const INITIAL_STATE = Immutable({
 /* ------------- Selectors ------------- */
 
 export const GameViewSelectors = {
-  getData: state => state.data
+  getGamePlayerId: state => state.gameView.payload.id,
+  getTurn: state => state.gameView.payload.turn
 }
 
 /* ------------- Reducers ------------- */

@@ -1,17 +1,13 @@
 import { createReducer, createActions } from "reduxsauce";
 import Immutable from "seamless-immutable";
-import Ships from '../Data/Ships'
+import Ships from "../Data/Ships";
 
 /* ------------- Types and Action Creators ------------- */
 
 const { Types, Creators } = createActions({
-  postShipsRequest: ["data"],
-  postShipsSuccess: ["payload"],
-  postShipsFailure: null,
-
   pushShip: ["data"],
 
-  resetShip: ['id'],
+  resetShip: ["id"],
 
   resetAllShips: null
 });
@@ -23,9 +19,8 @@ export default Creators;
 
 export const INITIAL_STATE = Immutable({
   data: null,
-  fetching: null,
   payload: null,
-  error: null,
+  counter: 0
 });
 
 /* ------------- Selectors ------------- */
@@ -36,48 +31,51 @@ export const ShipsSelectors = {
 
 /* ------------- Reducers ------------- */
 
-// request the data from an api
-export const request = (state, { data }) =>
-  state.merge({ fetching: true, data, payload: null });
-
-// successful api lookup
-export const success = (state, action) => {
-  const { payload } = action;
-  return state.merge({ fetching: false, error: null, payload });
-};
-
-// Something went wrong somewhere.
-export const failure = state =>
-  state.merge({ fetching: false, error: true, payload: null });
-
 export const pushShip = (state, action) => {
   const { data } = action;
   const id = data.id;
-  return state.setIn(["data", [id]], data.ship);
+  return (
+    state
+      .setIn(["data", [id]], data.ship)
+
+      // for counting the ships, set in store
+      .merge({
+        counter:
+          state.data[id].location.length === 0
+            ? state.counter + 1
+            : state.counter
+      })
+  );
 };
 
 export const resetShip = (state, action) => {
-  console.log(action);
   const { id } = action;
-  console.log(id)
-  return state.setIn(["data", [id]], Ships[id]);
+  return (
+    state
+      .setIn(["data", [id]], Ships[id])
+
+      // for counting the ships, set in store
+      .merge({
+        counter:
+          state.data[id].location.length !== 0
+            ? state.counter - 1
+            : state.counter
+      })
+  );
 };
 
 export const resetAllShips = state => {
   return state.merge({
-    data: Ships
+    data: Ships,
+    counter: 0
   });
 };
 /* ------------- Hookup Reducers To Types ------------- */
 
 export const reducer = createReducer(INITIAL_STATE, {
-  [Types.POST_SHIPS_REQUEST]: request,
-  [Types.POST_SHIPS_SUCCESS]: success,
-  [Types.POST_SHIPS_FAILURE]: failure,
-
   [Types.PUSH_SHIP]: pushShip,
 
   [Types.RESET_SHIP]: resetShip,
 
-  [Types.RESET_ALL_SHIPS]: resetAllShips,
+  [Types.RESET_ALL_SHIPS]: resetAllShips
 });

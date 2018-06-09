@@ -8,22 +8,40 @@ export default data => {
         gameGridEmpty[row + col] = {
           id: row + col,
           title: col,
-          ship: false,
-          salvo: false
+          // ship: false,
+          ship: {
+            isShip: false,
+            horizontal: null,
+            part: null
+          },
+          salvo: false,
+          hit: false
         };
       } else if (row !== "0" && col === "0") {
         gameGridEmpty[row + col] = {
           id: row + col,
           title: row,
-          ship: false,
-          salvo: false
+          // ship: false,
+          ship: {
+            isShip: false,
+            horizontal: null,
+            part: null
+          },
+          salvo: false,
+          hit: false
         };
       } else {
         gameGridEmpty[row + col] = {
           id: row + col,
           title: false,
-          ship: false,
-          salvo: false
+          // ship: false,
+          ship: {
+            isShip: false,
+            horizontal: null,
+            part: null
+          },
+          salvo: false,
+          hit: false
         };
       }
     });
@@ -34,13 +52,43 @@ export default data => {
 
   let gameGridsOfPlayerAndOpponent = {
     [playerId]: gameGridEmpty,
-    [opponentId]: JSON.parse(JSON.stringify(gameGridEmpty)),
+    [opponentId]: JSON.parse(JSON.stringify(gameGridEmpty))
   };
 
   const ships = data.ships;
+
   ships.forEach(ship => {
-    ship.locations.forEach(location => {
-      gameGridsOfPlayerAndOpponent[playerId][location].ship = true;
+    const horizontal =
+      ship.locations[0].charAt(0) === ship.locations[1].charAt(0);
+
+    ship.locations.forEach((location, i) => {
+      gameGridsOfPlayerAndOpponent[playerId][location].ship = {
+        isShip: true,
+        horizontal: horizontal,
+        part:
+          i === 0 ? "Start" : i === ship.locations.length - 1 ? "End" : "Mid"
+      };
+    });
+  });
+
+  const hits = data.hits;
+  const sinks = data.sinks;
+
+  hits.forEach(location => {
+    gameGridsOfPlayerAndOpponent[opponentId][location].hit = true;
+  });
+
+  sinks.forEach(ship => {
+    const horizontal =
+      ship.locations[0].charAt(0) === ship.locations[1].charAt(0);
+
+    ship.locations.forEach((location, i) => {
+      gameGridsOfPlayerAndOpponent[opponentId][location].ship = {
+        isShip: true,
+        horizontal: horizontal,
+        part:
+          i === 0 ? "Start" : i === ship.locations.length - 1 ? "End" : "Mid"
+      };
     });
   });
 

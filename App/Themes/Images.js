@@ -19,7 +19,13 @@ const images = {
   chevronRight: require('../Images/Icons/chevron-right.png'),
   hamburger: require('../Images/Icons/hamburger.png'),
   backButton: require('../Images/Icons/back-button.png'),
-  closeButton: require('../Images/Icons/close-button.png')
+  closeButton: require('../Images/Icons/close-button.png'),
+  submarine: require('../Images/ships_WGs/submarine.png'),
+  destroyer: require('../Images/ships_WGs/destroyer.png'),
+  aircraftCarrier: require('../Images/ships_WGs/aircraftCarrier.png'),
+  battleship: require('../Images/ships_WGs/battleship.png'),
+  // patrolBoat: require('../Images/ships_WGs/patrolBoat.png')
+
 }
 
 export default images

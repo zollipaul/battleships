@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native'
-import { Colors, Metrics } from '../../Themes/'
+import { Colors, Metrics, Images } from '../../Themes/'
 
 export default StyleSheet.create({
   container: {
@@ -11,30 +11,30 @@ export default StyleSheet.create({
     backgroundColor: "skyblue",
     width: Metrics.placingShipsSquareLength*5,
     height: Metrics.placingShipsSquareLength,
-    borderRadius: 15
+    borderRadius: Metrics.borderRadius
   },
   battleship: {
     backgroundColor: "skyblue",
     width: Metrics.placingShipsSquareLength * 4,
     height: Metrics.placingShipsSquareLength,
-    borderRadius: 15
+    borderRadius: Metrics.borderRadius
   },
   submarine: {
     backgroundColor: "skyblue",
     width: Metrics.placingShipsSquareLength * 3,
     height: Metrics.placingShipsSquareLength,
-    borderRadius: 15
+    borderRadius: Metrics.borderRadius
   },
   destroyer: {
     backgroundColor: "skyblue",
     width: Metrics.placingShipsSquareLength * 3,
     height: Metrics.placingShipsSquareLength,
-    borderRadius: 15
+    borderRadius: Metrics.borderRadius
   },
   patrolBoat: {
     backgroundColor: "skyblue",
     width: Metrics.placingShipsSquareLength * 2,
     height: Metrics.placingShipsSquareLength,
-    borderRadius: 15
+    borderRadius: Metrics.borderRadius
   },
 })

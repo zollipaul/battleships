@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native'
-import { Colors, Metrics } from '../../Themes'
+import { Colors, Metrics } from '../../Themes/index'
 
 export default StyleSheet.create({
   container: {
@@ -17,7 +17,6 @@ export default StyleSheet.create({
     marginVertical: Metrics.smallMargin,
     justifyContent: 'center'
   },
-
   cannotBeChangedOrJoined: {
     flex: 1,
     backgroundColor: Colors.charcoal,

@@ -27,7 +27,6 @@ export function * getGames (api, action) {
     // located in ../Transforms/. Otherwise, just pass the data back from the api.
     // response.data.map(game => game.creationDate = stringToDate(game.creationDate))
     response.data.games.map(game => game["created"] = StringToDate(game.created))
-    console.log(response.data)
     yield put(GamesActions.getGamesSuccess(response.data))
   } else {
     yield put(GamesActions.getGamesFailure())

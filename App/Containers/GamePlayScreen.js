@@ -1,73 +1,54 @@
 import React, { Component } from "react";
 import { Text, View } from "react-native";
 import { connect } from "react-redux";
-// Add Actions - replace 'Your' with whatever your reducer is called :)
-// import YourActions from '../Redux/YourRedux'
+import GamePlayPlayerGrid from "../Components/GamePlayPlayerGrid";
+import GamePlayOpponentGrid from "./GamePlayOpponentGrid";
+import SalvoActions from "../Redux/SalvoRedux";
 
 // Styles
 import styles from "./Styles/GamePlayScreenStyle";
-import Square from "./Square";
-import { Metrics } from "../Themes/";
+import OpponentShipsContainer from "../Components/OpponentShips/OpponentShipsContainer";
 
 class PlacingShipsScreen extends Component {
   constructor(props) {
     super(props);
   }
 
-  componentDidMount() {
-    // this.props.getGameView(this.props.screenProps.gamePlayer.id);
-    this.props.getGameView("7");
-  }
-
-  renderPlayerGrid = () => {
-    return this.props.gameView.payload.gameGrids["7"].map(square => {
-      return <Square square={square} key={square.id} length={Metrics.gamePlayPlayerSquareLength} />;
-    });
-  };
-
-  renderOpponentGrid = () => {
-    return this.props.gameView.payload.gameGrids["8"].map(square => {
-      return <Square square={square} key={square.id} length={Metrics.gamePlayOpponentSquareLength}/>;
-    });
-  };
-
   render() {
-    console.log(this.props.gameView)
-    return this.props.gameView.fetching === false ? (
-      <View style={styles.container}>
-        <View style={styles.centered}>
-          <View
-            style={styles.playerGrid}
-          >
-            {this.renderPlayerGrid()}
-          </View>
-          <View
-            style={styles.opponentGrid}
-          >
-            {this.renderOpponentGrid()}
+    if (this.props.gameView.payload !== null) {
+      const playerId = this.props.gameView.payload.id;
+      const gameGridPlayer = this.props.gameView.payload.gameGrids[playerId];
+      const opponentId = this.props.gameView.payload.opponentId;
+      const gameGridOpponent = this.props.gameView.payload.gameGrids[
+        opponentId
+      ];
+      return (
+        <View style={styles.container}>
+          <View style={styles.centered}>
+            <View style={styles.gameGridPlayerAndOpponentShips}>
+              <GamePlayPlayerGrid grid={gameGridPlayer} />
+              <OpponentShipsContainer sinks={this.props.gameView.payload.sinks} />
+            </View>
+            <GamePlayOpponentGrid grid={gameGridOpponent} />
           </View>
         </View>
-      </View>
-    ) : (
-      <Text>Loading...</Text>
-    );
+      );
+    } else {
+      return <Text>Loading...</Text>;
+    }
   }
 }
 
 const mapStateToProps = state => {
   return {
-    gameView: state.gameView,
-    gameGrid: state.gameGrid.payload
+    gameView: state.gameView
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    getGameView: gamePlayerId => {
-      dispatch({ type: "GAME_VIEW_REQUEST", data: gamePlayerId });
-    },
-    postGameGridSize: size => {
-      dispatch({ type: "POST_GAME_GRID_SIZE", payload: size });
+    toggleSalvo: salvo => {
+      dispatch(SalvoActions.toggleSalvo(salvo));
     }
   };
 };
