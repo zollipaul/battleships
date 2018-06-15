@@ -13,6 +13,9 @@ export default StyleSheet.create({
   hitBackground: {
     backgroundColor: Colors.bloodOrange
   },
+  currentSalvoBackground: {
+    backgroundColor: Colors.currentSalvoBackground
+  },
   horizontalTrueAndPartStart: {
     borderTopLeftRadius: Metrics.borderRadius,
     borderBottomLeftRadius: Metrics.borderRadius,

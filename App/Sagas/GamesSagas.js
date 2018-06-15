@@ -17,9 +17,6 @@ import StringToDate from '../Transforms/StringToDate'
 
 export function * getGames (api, action) {
   const { data } = action
-  // get current data from Store
-  // const currentData = yield select(GamesSelectors.getData)
-  // make the call to the api
   const response = yield call(api.getGames, data)
   // success?
   if (response.ok) {

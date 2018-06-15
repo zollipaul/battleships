@@ -26,6 +26,8 @@ const metrics = {
   gamePlayOpponentGridWidth: width *0.8,
   gamePlayOpponentSquareLength: width*0.8* 0.0905,
 
+  crosshair: width* 0.4,
+
   navBarHeight: (Platform.OS === 'ios') ? 64 : 54,
   // navBarHeight: (Platform.OS === 'ios') ? 45 : 45,
 

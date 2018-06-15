@@ -5,7 +5,7 @@ import Immutable from "seamless-immutable";
 
 const { Types, Creators } = createActions({
   toggleSalvo: ["data"],
-  resetAllSalvoes: null
+  resetAllSalvoes: null,
 });
 
 export const SalvoesTypes = Types;

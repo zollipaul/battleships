@@ -2,14 +2,15 @@ import { StyleSheet } from "react-native";
 import { Metrics } from '../../../Themes/index'
 
 export default StyleSheet.create({
-  rows: {
+  container: {
     flex: 1,
-    flexDirection: "row",
+    height: Metrics.gamePlayPlayerGridWidth/2,
     justifyContent: "space-around",
-    alignItems: "center",
+    alignItems: 'center'
   },
-  col: {
-    height: Metrics.gamePlayPlayerGridWidth,
+  row: {
+    flex: 1,
+    flexDirection: 'row',
     justifyContent: "space-around",
   },
 });

@@ -2,7 +2,6 @@ import React from "react";
 import { StackNavigator } from "react-navigation";
 import LaunchScreen from "../Containers/LaunchScreen";
 import Header from "../Containers/Header";
-import WaitingForOpponent from "../Containers/WaitingForOpponentScreen";
 
 const LaunchScreenNavigation = StackNavigator(
   {

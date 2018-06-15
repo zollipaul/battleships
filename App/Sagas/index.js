@@ -6,19 +6,16 @@ import DebugConfig from "../Config/DebugConfig";
 /* ------------- Types ------------- */
 
 import { StartupTypes } from "../Redux/StartupRedux";
-import { GithubTypes } from "../Redux/GithubRedux";
 import { PlayersTypes } from "../Redux/PlayersRedux";
 import { GamesTypes } from "../Redux/GamesRedux";
 import { GameViewTypes } from "../Redux/GameViewRedux";
 import { LeaderboardTypes } from "../Redux/LeaderboardRedux";
 import { ManageGameTypes } from "../Redux/ManageGameRedux";
-import { ShipsTypes} from '../Redux/ShipsRedux'
 
 /* ------------- Sagas ------------- */
 
 // workers sagas
 import { startup } from "./StartupSagas";
-import { getUserAvatar } from "./GithubSagas";
 import {
   getPlayers,
   loginPlayer,
@@ -26,9 +23,16 @@ import {
   signUpPlayer
 } from "./PlayerSagas";
 import { getGames } from "./GamesSagas";
-import { getGameView } from "./GameViewSagas";
+import { getGameView, watchStage } from "./GameViewSagas";
 import { getLeaderboard } from "./LeaderboardSagas";
-import { createGame, changeGame, joinGame, startGame, watchEndOfTurn } from "./ManageGameSagas";
+import {
+  createGame,
+  changeGame,
+  joinGame,
+  startGame,
+  postSalvoes
+} from "./ManageGameSagas";
+import { getPlacingShipsGridY } from "./PlacingShipsGridPositionSagas";
 
 /* ------------- API ------------- */
 
@@ -43,6 +47,7 @@ export default function* root() {
   yield all([
     // some sagas only receive an action
     takeLatest(StartupTypes.STARTUP, startup),
+    takeLatest(StartupTypes.STARTUP, getPlacingShipsGridY),
 
     // some sagas receive extra parameters in addition to an action
     // takeLatest(GithubTypes.USER_REQUEST, getUserAvatar, api),
@@ -60,7 +65,14 @@ export default function* root() {
     takeLatest(GameViewTypes.GAME_VIEW_REQUEST, getGameView, api),
     takeLatest(LeaderboardTypes.LEADERBOARD_REQUEST, getLeaderboard, api),
 
-    takeLatest(ManageGameTypes.START_GAME_SUCCESS, watchEndOfTurn, api),
+    takeLatest(ManageGameTypes.POST_SALVOES_REQUEST, postSalvoes, api),
+
+    takeLatest(
+      [ManageGameTypes.START_GAME_SUCCESS, ManageGameTypes.CHANGE_GAME],
+      watchStage,
+      api
+    )
+
 
   ]);
 }

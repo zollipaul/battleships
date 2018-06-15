@@ -7,23 +7,23 @@ export default {
     squares: [
       {
         part: "Start",
-        horizontal: false
+        horizontal: true
       },
       {
         part: "Mid",
-        horizontal: false
+        horizontal: true
       },
       {
         part: "Mid",
-        horizontal: false
+        horizontal: true
       },
       {
         part: "Mid",
-        horizontal: false
+        horizontal: true
       },
       {
         part: "End",
-        horizontal: false
+        horizontal: true
       }
     ]
   },
@@ -35,19 +35,19 @@ export default {
     squares: [
       {
         part: "Start",
-        horizontal: false
+        horizontal: true
       },
       {
         part: "Mid",
-        horizontal: false
+        horizontal: true
       },
       {
         part: "Mid",
-        horizontal: false
+        horizontal: true
       },
       {
         part: "End",
-        horizontal: false
+        horizontal: true
       }
     ]
   },
@@ -60,15 +60,15 @@ export default {
       {
         id: '1',
         part: "Start",
-        horizontal: false
+        horizontal: true
       },
       {
         part: "Mid",
-        horizontal: false
+        horizontal: true
       },
       {
         part: "End",
-        horizontal: false
+        horizontal: true
       }
     ]
   },
@@ -80,15 +80,15 @@ export default {
     squares: [
       {
         part: "Start",
-        horizontal: false,
+        horizontal: true,
       },
       {
         part: "Mid",
-        horizontal: false
+        horizontal: true
       },
       {
         part: "End",
-        horizontal: false
+        horizontal: true
       }
     ]
   },
@@ -100,11 +100,11 @@ export default {
     squares: [
       {
         part: "Start",
-        horizontal: false
+        horizontal: true
       },
       {
         part: "End",
-        horizontal: false
+        horizontal: true
       }
     ]
   }

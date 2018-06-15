@@ -17,7 +17,9 @@ class Ship extends Component {
       pan: new Animated.ValueXY({ x: 0, y: 0 }),
       spin: new Animated.Value(0),
       swing: new Animated.Value(0),
-      nextRotationIsSpin: false
+      nextRotationIsSpin: false,
+      locationX: 0,
+      locationY: 0
     };
   }
 
@@ -34,51 +36,68 @@ class Ship extends Component {
       onStartShouldSetPanResponder: (e, gesture) => true,
       // invoked, when access to element is granted aka is touched
       onPanResponderGrant: (e, gesture) => {
-        // console.log(this.state.pan)
         this.state.pan.extractOffset();
-        this.state.pan.setValue({ x: 0, y: 0 });
+        // console.log("pageX: " + e.nativeEvent.pageX + " pageY: " + e.nativeEvent.pageY);
+        // console.log(
+        //   "touch rel. element: " + e.nativeEvent.locationX,
+        //   e.nativeEvent.locationY
+        // );
+        this.setState({
+          locationX: e.nativeEvent.locationX,
+          locationY: e.nativeEvent.locationY
+        });
       },
       // ignore first argument, only interested in second argument, which updates Animated View location
-      onPanResponderMove: Animated.event([
-        null,
-        { dx: this.state.pan.x, dy: this.state.pan.y }
-      ]),
+      onPanResponderMove:
+        //   (evt, gesture) => {
+        //
+        //   this.state.gridPan.setValue({x: gesture.dx, y: gesture.dy})
+        //   // console.log(this._val)
+        // },
+
+        Animated.event([null, { dx: this.state.pan.x, dy: this.state.pan.y }]),
       onPanResponderRelease: (e, gesture) => {
         const horizontal = this.props.ships.data[this.state.id].horizontal;
         const prevShipXLocation = this.props.ships.data[this.state.id]
           .coordinates.shipXLocation;
         const prevShipYLocation = this.props.ships.data[this.state.id]
           .coordinates.shipYLocation;
-        // console.log("moveX: " + gesture.moveX + " moveY: " + gesture.moveY);
+        console.log("moveX: " + gesture.moveX + " moveY: " + gesture.moveY);
+        // console.log("pageX: " + e.nativeEvent.pageX + " pageY: " + e.nativeEvent.pageY);
         // console.log("x0: "+ gesture.x0 + " y0: " + gesture.y0)
-        // console.log("touch rel. element: "+ e.nativeEvent.locationX, e.nativeEvent.locationY)
+        // console.log(
+        //   "touch rel. element: " + e.nativeEvent.locationX,
+        //   e.nativeEvent.locationY
+        // );
         // console.log('horizontal: ' + horizontal)
+        console.log('dx, dy: ' + gesture.dx, gesture.dy)
 
-        // get px and py of gameGrid
-        const { px, py, height } = this.props.gameGrid;
-        // console.log(px, py)
+        // get px and py of gridPosition
+        const { px, py } = this.props.gridPosition;
+        // console.log("px + py:" + px, py)
 
         // get left upper corner of ship before move
         const luX0 =
           gesture.x0 -
           (horizontal
-            ? e.nativeEvent.locationX
-            : squareLength - e.nativeEvent.locationY);
+            ? this.state.locationX
+            : squareLength - this.state.locationY);
         const luY0 =
           gesture.y0 -
-          (horizontal ? e.nativeEvent.locationY : e.nativeEvent.locationX);
+          (horizontal ? this.state.locationY : this.state.locationX);
         // console.log("luX0, luY0:" + luX0, luY0);
 
         // get left upper corner of ship on move
         const luX =
           gesture.moveX -
           (horizontal
-            ? e.nativeEvent.locationX
-            : squareLength - e.nativeEvent.locationY);
+            ? this.state.locationX
+            : squareLength - this.state.locationY);
         const luY =
           gesture.moveY -
-          (horizontal ? e.nativeEvent.locationY : e.nativeEvent.locationX);
-        // console.log("luX, luY:" + luX, luY);
+          (horizontal ? this.state.locationY : this.state.locationX);
+        // console.log("luX, luY: " + luX, luY);
+        // console.log("squareLenght: " + squareLength)
 
         // get n: "index" (1, 2, 3 ...) of x-axis and m: "char" (A, B, C, ...) of y-axis
         const shipXLocation = Math.round((luX - px) / squareLength);
@@ -87,7 +106,7 @@ class Ship extends Component {
         // get sluX und sluY: left upper corner of square (n,m)
         const sluX = shipXLocation * squareLength + px;
         const sluY = shipYLocation * squareLength + py;
-        // console.log(sluX, sluY)
+        // console.log("left upper of next square: " + sluX, sluY)
 
         // detect if touch without movement, then rotate ship
         if (this.shipTouched(gesture)) {
@@ -168,6 +187,7 @@ class Ship extends Component {
             toValue: { x: sluX - luX0, y: sluY - luY0 },
             duration: 200,
             delay: 0
+            // useNativeDriver: true
           }).start(() => {
             this._lastPos = this._val;
           });
@@ -179,7 +199,7 @@ class Ship extends Component {
   }
 
   shipTouched = gesture => {
-    return gesture.moveX === 0 && gesture.moveY === 0;
+    return gesture.dx === 0 && gesture.dy === 0;
   };
 
   componentWillUnmount() {
@@ -332,6 +352,8 @@ class Ship extends Component {
   };
 
   render() {
+    console.log("render");
+
     const panStyle = {
       transform: [
         {
@@ -349,11 +371,11 @@ class Ship extends Component {
     const shipType = this.props.ship.type;
 
     return (
-      <Animated.Image
+      <Animated.View
         {...this.panResponder.panHandlers}
-        source={Images[shipType]}
+        // source={Images[shipType]}
         style={[panStyle, styles[shipType]]}
-        resizeMode="cover"
+        // resizeMode="cover"
       />
     );
   }
@@ -361,7 +383,7 @@ class Ship extends Component {
 
 const mapStateToProps = state => {
   return {
-    gameGrid: state.gameGrid.payload,
+    gridPosition: state.gridPosition.payload,
     ships: state.ships
   };
 };

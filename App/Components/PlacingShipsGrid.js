@@ -28,7 +28,7 @@ export default class PlacingShipsGrid extends Component {
       <View style={styles.centered}>
         <View
           style={styles.grid}
-          // ref={this.props.setGridRef}
+          onLayout={this.props.measureLayout}
         >
           {this.renderSquares()}
         </View>

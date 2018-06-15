@@ -7,7 +7,9 @@ export default StyleSheet.create({
     borderRadius: 5,
     marginHorizontal: Metrics.section,
     marginVertical: Metrics.baseMargin,
-    justifyContent: 'center'
+    justifyContent: 'center',
+    paddingRight: 30,
+    paddingLeft: 30
   },
   active: {
     backgroundColor: Colors.fire,

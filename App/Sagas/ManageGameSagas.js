@@ -33,16 +33,9 @@ export function* createGame(api, action) {
 
   // success?
   if (response.ok) {
-    // You might need to change the response here - do this with a 'transform',
-    // located in ../Transforms/. Otherwise, just pass the data back from the api.
     yield put(ManageGameActions.createGameSuccess(response.data));
-
-    // yield put(NavigationActions.navigate({ routeName: "PlacingShipsScreen" }));
-
     yield put(GamesActions.getGamesRequest());
     yield put(GameViewActions.gameViewRequest(response.data.gamePlayerId));
-    // yield put(ShipsActions.resetAllShips());
-    // yield put(SalvoActions.resetAllSalvoes());
   } else {
     yield put(ManageGameActions.createGameFailure());
   }
@@ -50,11 +43,8 @@ export function* createGame(api, action) {
 
 export function* changeGame(action) {
   const { payload } = action;
-  // yield put(NavigationActions.navigate({ routeName: "PlacingShipsScreen" }));
   yield put(GamesActions.getGamesRequest());
   yield put(GameViewActions.gameViewRequest(payload));
-  // yield put(ShipsActions.resetAllShips());
-  // yield put(SalvoActions.resetAllSalvoes());
 }
 
 export function* joinGame(api, action) {
@@ -65,12 +55,8 @@ export function* joinGame(api, action) {
   // success?
   if (response.ok) {
     yield put(ManageGameActions.joinGameSuccess(response.data));
-
-    // yield put(NavigationActions.navigate({ routeName: "PlacingShipsScreen" }));
     yield put(GamesActions.getGamesRequest());
     yield put(GameViewActions.gameViewRequest(response.data.gamePlayerId));
-    // yield put(ShipsActions.resetAllShips());
-    // yield put(SalvoActions.resetAllSalvoes());
   } else {
     yield put(ManageGameActions.joinGameFailure());
   }
@@ -89,39 +75,49 @@ export function* startGame(api, action) {
   if (response.ok) {
     yield put(ManageGameActions.startGameSuccess(response.data));
     yield put(GameViewActions.gameViewRequest(gamePlayerId));
-
-    // yield put(NavigationActions.navigate({ routeName: "GamePlayScreen" }));
-    // yield put(GameViewActions.gameViewRequest(gamePlayerId));
-    // yield put(ShipsActions.resetAllShips());
-    // yield put(SalvoActions.resetAllSalvoes());
   } else {
     yield put(ManageGameActions.startGameFailure());
   }
 }
 
-export function* watchEndOfTurn(api, action) {
-  const { data } = action;
+export function* postSalvoes(api) {
+  console.log('postSalvoes')
 
-  while (yield take("TOGGLE_SALVO")) {
-    const salvoes = yield select(ManageGameReduxSelectors.getSalvoes);
-    const turn = yield select (GameViewSelectors.getTurn)
+  const salvoes = yield select(ManageGameReduxSelectors.getSalvoes);
+  const turn = yield select(GameViewSelectors.getTurn);
+  // convert to object for java backend
+  const salvoObject = SalvoesToObject(turn, salvoes);
+  const gamePlayerId = yield select(GameViewSelectors.getGamePlayerId);
+  const response = yield call(api.postSalvoes, gamePlayerId, salvoObject);
 
-    // convert to object for java backend
-    const salvoObject = SalvoesToObject(turn, salvoes);
-
-    if (salvoes.length === 5) {
-      const gamePlayerId = yield select(GameViewSelectors.getGamePlayerId);
-      const response = yield call(api.postSalvoes, gamePlayerId, salvoObject);
-      if (response.ok) {
-        yield put(ManageGameActions.endTurnSuccess(response.data));
-
-        console.log('gameviewRequest')
-        yield put(GameViewActions.gameViewRequest(gamePlayerId));
-
-        yield put(SalvoActions.resetAllSalvoes());
-      } else {
-        yield put(ManageGameActions.endTurnFailure());
-      }
-    }
+  console.log(response)
+  if (response.ok) {
+    yield put(ManageGameActions.postSalvoesSuccess(response.data));
+    yield put(GameViewActions.gameViewRequest(gamePlayerId));
+    yield put(SalvoActions.resetAllSalvoes());
+  } else {
+    yield put(ManageGameActions.postSalvoesFailure());
   }
 }
+//
+// export function* watchEndOfTurn(api) {
+//   while (yield take("TOGGLE_SALVO")) {
+//     const salvoes = yield select(ManageGameReduxSelectors.getSalvoes);
+//     const turn = yield select (GameViewSelectors.getTurn)
+//
+//     // convert to object for java backend
+//     const salvoObject = SalvoesToObject(turn, salvoes);
+//
+//     if (salvoes.length === 5) {
+//       const gamePlayerId = yield select(GameViewSelectors.getGamePlayerId);
+//       const response = yield call(api.postSalvoes, gamePlayerId, salvoObject);
+//       if (response.ok) {
+//         yield put(ManageGameActions.endTurnSuccess(response.data));
+//         yield put(GameViewActions.gameViewRequest(gamePlayerId));
+//         yield put(SalvoActions.resetAllSalvoes());
+//       } else {
+//         yield put(ManageGameActions.endTurnFailure());
+//       }
+//     }
+//   }
+// }

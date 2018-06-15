@@ -37,7 +37,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-end',
   },
-  headerLoggedOutOrPlacingShips: {
+  headerLoggedOutOrPlacingShipsOrGamePlay: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',

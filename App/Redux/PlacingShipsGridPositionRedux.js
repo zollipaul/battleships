@@ -4,7 +4,8 @@ import Immutable from "seamless-immutable";
 /* ------------- Types and Action Creators ------------- */
 
 const { Types, Creators } = createActions({
-  postGameGridSize: ["payload"]
+  postGameGridX: ["payload"],
+  postGameGridY: ["payload"]
 });
 
 export const GameGridTypes = Types;
@@ -24,14 +25,19 @@ export const GameGridSelectors = {
 
 /* ------------- Reducers ------------- */
 
-export const postGameGridSize = (state, action) => {
+export const postGameGridX = (state, action) => {
   const { payload } = action;
-  return state.merge({payload})
+  return state.setIn(["payload", "px"], payload)
+};
+
+export const postGameGridY = (state, action) => {
+  const { payload } = action;
+  return state.setIn(["payload", "py"], payload)
 };
 
 /* ------------- Hookup Reducers To Types ------------- */
 
 export const reducer = createReducer(INITIAL_STATE, {
-
-  [Types.POST_GAME_GRID_SIZE]: postGameGridSize
+  [Types.POST_GAME_GRID_X]: postGameGridX,
+  [Types.POST_GAME_GRID_Y]: postGameGridY
 });

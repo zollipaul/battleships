@@ -8,6 +8,7 @@ import SalvoActions from "../Redux/SalvoRedux";
 // Styles
 import styles from "./Styles/GamePlayScreenStyle";
 import OpponentShipsContainer from "../Components/OpponentShips/OpponentShipsContainer";
+import GamePlayHeading from "../Components/GamePlayHeading";
 
 class PlacingShipsScreen extends Component {
   constructor(props) {
@@ -15,22 +16,25 @@ class PlacingShipsScreen extends Component {
   }
 
   render() {
-    if (this.props.gameView.payload !== null) {
-      const playerId = this.props.gameView.payload.id;
-      const gameGridPlayer = this.props.gameView.payload.gameGrids[playerId];
-      const opponentId = this.props.gameView.payload.opponentId;
-      const gameGridOpponent = this.props.gameView.payload.gameGrids[
-        opponentId
-      ];
+    if (this.props.gameView !== null) {
+      const playerId = this.props.gameView.id;
+      const gameGridPlayer = this.props.gameView.gameGrids[playerId];
       return (
         <View style={styles.container}>
-          <View style={styles.centered}>
-            <View style={styles.gameGridPlayerAndOpponentShips}>
-              <GamePlayPlayerGrid grid={gameGridPlayer} />
-              <OpponentShipsContainer sinks={this.props.gameView.payload.sinks} />
+          <View style={styles.gameGridPlayerAndOpponentShips}>
+            <GamePlayPlayerGrid grid={gameGridPlayer} />
+            <View style={styles.centered}>
+              <GamePlayHeading
+                turn={this.props.gameView.turn}
+                stage={this.props.gameView.stage}
+                winner={this.props.gameView.winner}
+                salvoesLeft={5 - this.props.salvoes.length}
+              />
+
+              <OpponentShipsContainer sinks={this.props.gameView.sinks} />
             </View>
-            <GamePlayOpponentGrid grid={gameGridOpponent} />
           </View>
+          <GamePlayOpponentGrid />
         </View>
       );
     } else {
@@ -41,7 +45,8 @@ class PlacingShipsScreen extends Component {
 
 const mapStateToProps = state => {
   return {
-    gameView: state.gameView
+    gameView: state.gameView.payload,
+    salvoes: state.salvoes
   };
 };
 

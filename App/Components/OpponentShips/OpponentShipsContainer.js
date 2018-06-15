@@ -13,21 +13,28 @@ export default class OpponentShipsContainer extends Component {
   };
 
   render() {
+    const ships = JSON.parse(JSON.stringify(Ships))
     const sinks = this.props.sinks;
     sinks.forEach(ship => {
-      Ships[ship.type].isSunk = true
+      ships[ship.type].isSunk = true
     })
 
     return (
-      <View style={styles.rows}>
-        <View style={styles.col}>
-          <OpponentShip ship={Ships["aircraftCarrier"]} />
-          <OpponentShip ship={Ships["battleship"]} />
+      <View style={styles.container}>
+        <View style={styles.row}>
+          <OpponentShip ship={ships["patrolBoat"]} />
         </View>
-        <View style={styles.col}>
-          <OpponentShip ship={Ships["submarine"]} />
-          <OpponentShip ship={Ships["destroyer"]} />
-          <OpponentShip ship={Ships["patrolBoat"]} />
+
+        <View style={styles.row}>
+          <OpponentShip ship={ships["battleship"]} />
+
+        </View>
+        <View style={styles.row}>
+          <OpponentShip ship={ships["destroyer"]} />
+          <OpponentShip ship={ships["submarine"]} />
+        </View>
+        <View style={styles.row}>
+          <OpponentShip ship={ships["aircraftCarrier"]} />
         </View>
       </View>
     );

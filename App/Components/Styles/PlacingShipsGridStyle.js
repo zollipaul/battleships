@@ -9,7 +9,6 @@ export default StyleSheet.create({
     width: Metrics.placingShipsGridWidth,
     flexDirection: "row",
     flexWrap: "wrap",
-    marginTop: 20,
     backgroundColor: Colors.eggplant,
   },
   centered: {

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Text, View } from "react-native";
 import { connect } from "react-redux";
 import PlayButton from "./PlayButton";
-import GameGridActions from "../Redux/GameGridRedux";
+import GameGridActions from "../Redux/PlacingShipsGridPositionRedux";
 import PlacingShipsGrid from "../Components/PlacingShipsGrid";
 import ShipsContainer from "../Components/ShipsContainer";
 
@@ -15,32 +15,16 @@ class PlacingShipsScreen extends Component {
     this.state = {};
   }
 
-  // componentDidUpdate(previousProps) {
-  //   setTimeout(() => {
-  //     if (this.grid !== null && this.grid !== undefined) {
-  //       this.grid.measure((fx, fy, width, height, px, py) => {
-  //         console.log("grid: " + fx, fy, width, height, px, py);
-  //         this.props.postGameGridSize({
-  //           px: 19,
-  //           py: 85,
-  //           width: width,
-  //           height: height
-  //         });
-  //       });
-  //     }
-  //   }, 0);
-  // }
-
-  // setGridRef = view => {
-  //   this.grid = view;
-  // };
+  measureLayout = event => {
+    this.props.postGameGridX(event.nativeEvent.layout.x);
+  };
 
   render() {
     return this.props.gameView.payload !== null ? (
       <View style={styles.container}>
         <PlacingShipsGrid
           gameView={this.props.gameView}
-          // setGridRef={this.setGridRef}
+          measureLayout={this.measureLayout}
         />
         <ShipsContainer />
         <PlayButton />
@@ -59,8 +43,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    postGameGridSize: size => {
-      dispatch(GameGridActions.postGameGridSize(size));
+    postGameGridX: px => {
+      dispatch(GameGridActions.postGameGridX(px));
     }
   };
 };

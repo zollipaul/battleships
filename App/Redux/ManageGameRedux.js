@@ -18,9 +18,9 @@ const { Types, Creators } = createActions({
   startGameSuccess: ["payload"],
   startGameFailure: null,
 
-  endTurnRequest: ["data"],
-  endTurnSuccess: ["payload"],
-  endTurnFailure: null,
+  postSalvoesRequest: ["data"],
+  postSalvoesSuccess: ["payload"],
+  postSalvoesFailure: null,
 
 });
 
@@ -86,7 +86,7 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.START_GAME_SUCCESS]: success,
   [Types.START_GAME_FAILURE]: failure,
 
-  [Types.END_TURN_REQUEST]: request,
-  [Types.END_TURN_SUCCESS]: success,
-  [Types.END_TURN_FAILURE]: failure,
+  [Types.POST_SALVOES_REQUEST]: request,
+  [Types.POST_SALVOES_SUCCESS]: success,
+  [Types.POST_SALVOES_FAILURE]: failure,
 });

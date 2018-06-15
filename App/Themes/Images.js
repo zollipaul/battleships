@@ -25,6 +25,8 @@ const images = {
   aircraftCarrier: require('../Images/ships_WGs/aircraftCarrier.png'),
   battleship: require('../Images/ships_WGs/battleship.png'),
   // patrolBoat: require('../Images/ships_WGs/patrolBoat.png')
+  torpedo: require('../Images/Icons/torpedo-flaticon.png'),
+  crosshair: require('../Images/Icons/crosshair.png')
 
 }
 

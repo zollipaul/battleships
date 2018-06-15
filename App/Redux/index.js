@@ -9,7 +9,7 @@ export const reducers = combineReducers({
   nav: require('./NavigationRedux').reducer,
   github: require('./GithubRedux').reducer,
   search: require('./SearchRedux').reducer,
-  gameGrid: require('./GameGridRedux').reducer,
+  gridPosition: require('./PlacingShipsGridPositionRedux').reducer,
   players: require('./PlayersRedux').reducer,
   games: require('./GamesRedux').reducer,
   gameView: require('./GameViewRedux').reducer,

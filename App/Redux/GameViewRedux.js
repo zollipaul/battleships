@@ -25,7 +25,7 @@ export const INITIAL_STATE = Immutable({
 
 export const GameViewSelectors = {
   getGamePlayerId: state => state.gameView.payload.id,
-  getTurn: state => state.gameView.payload.turn
+  getTurn: state => state.gameView.payload.turn,
 }
 
 /* ------------- Reducers ------------- */
@@ -44,10 +44,13 @@ export const success = (state, action) => {
 export const failure = state =>
   state.merge({ fetching: false, error: true, payload: null })
 
+export const update = state =>
+  state.merge( { fetching: true })
+
 /* ------------- Hookup Reducers To Types ------------- */
 
 export const reducer = createReducer(INITIAL_STATE, {
   [Types.GAME_VIEW_REQUEST]: request,
   [Types.GAME_VIEW_SUCCESS]: success,
-  [Types.GAME_VIEW_FAILURE]: failure
+  [Types.GAME_VIEW_FAILURE]: failure,
 })
