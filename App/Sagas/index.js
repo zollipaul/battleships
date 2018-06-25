@@ -10,7 +10,7 @@ import { PlayersTypes } from "../Redux/PlayersRedux";
 import { GamesTypes } from "../Redux/GamesRedux";
 import { GameViewTypes } from "../Redux/GameViewRedux";
 import { LeaderboardTypes } from "../Redux/LeaderboardRedux";
-import { ManageGameTypes } from "../Redux/ManageGameRedux";
+import { ManageGameTypes } from '../Redux/ManageGameRedux'
 
 /* ------------- Sagas ------------- */
 
@@ -22,15 +22,16 @@ import {
   logoutPlayer,
   signUpPlayer
 } from "./PlayerSagas";
-import { getGames } from "./GamesSagas";
-import { getGameView, watchStage } from "./GameViewSagas";
+import { getGames, backgroundSyncGames } from "./GamesSagas";
+import { getGameView, gameViewSyncManager } from "./GameViewSagas";
 import { getLeaderboard } from "./LeaderboardSagas";
 import {
   createGame,
   changeGame,
   joinGame,
   startGame,
-  postSalvoes
+  postSalvoes,
+  clickOnGameInTabBar
 } from "./ManageGameSagas";
 import { getPlacingShipsGridY } from "./PlacingShipsGridPositionSagas";
 
@@ -45,33 +46,36 @@ const api = DebugConfig.useFixtures ? FixtureAPI : API.create();
 // watchers sagas
 export default function* root() {
   yield all([
-    // some sagas only receive an action
     takeLatest(StartupTypes.STARTUP, startup),
-    takeLatest(StartupTypes.STARTUP, getPlacingShipsGridY),
+    takeLatest(StartupTypes.STARTUP, backgroundSyncGames, api),
 
     // some sagas receive extra parameters in addition to an action
     // takeLatest(GithubTypes.USER_REQUEST, getUserAvatar, api),
+    takeLatest(GamesTypes.GET_GAMES_REQUEST, getGames, api),
     takeLatest(PlayersTypes.GET_PLAYERS_REQUEST, getPlayers, api),
     takeLatest(PlayersTypes.LOGIN_PLAYER_REQUEST, loginPlayer, api),
     takeLatest(PlayersTypes.LOGOUT_PLAYER_REQUEST, logoutPlayer, api),
     takeLatest(PlayersTypes.SIGN_UP_PLAYER_REQUEST, signUpPlayer, api),
-    takeLatest(GamesTypes.GET_GAMES_REQUEST, getGames, api),
 
     takeLatest(ManageGameTypes.CREATE_GAME_REQUEST, createGame, api),
     takeEvery(ManageGameTypes.CHANGE_GAME, changeGame),
     takeLatest(ManageGameTypes.JOIN_GAME_REQUEST, joinGame, api),
     takeLatest(ManageGameTypes.START_GAME_REQUEST, startGame, api),
+    takeEvery(ManageGameTypes.CLICK_ON_GAME_IN_TAB_BAR, clickOnGameInTabBar),
 
     takeLatest(GameViewTypes.GAME_VIEW_REQUEST, getGameView, api),
+    // takeLatest(GameViewTypes.GAME_VIEW_SYNC_REQUEST, getGameView, api),
+
     takeLatest(LeaderboardTypes.LEADERBOARD_REQUEST, getLeaderboard, api),
 
     takeLatest(ManageGameTypes.POST_SALVOES_REQUEST, postSalvoes, api),
 
     takeLatest(
-      [ManageGameTypes.START_GAME_SUCCESS, ManageGameTypes.CHANGE_GAME],
-      watchStage,
+      [ManageGameTypes.JOIN_GAME_SUCCESS, ManageGameTypes.CHANGE_GAME, ManageGameTypes.CREATE_GAME_SUCCESS],
+      gameViewSyncManager,
       api
     )
+
 
 
   ]);

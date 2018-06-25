@@ -1,22 +1,10 @@
 import React, { Component } from 'react'
 import Square from "../Components/Square";
-
-// import PropTypes from 'prop-types';
-import { View, Text } from 'react-native'
+import { View } from 'react-native'
 import styles from './Styles/GamePlayPlayerGridStyle'
 import { Metrics } from '../Themes'
 
 export default class GamePlayPlayerGrid extends Component {
-  // // Prop type warnings
-  // static propTypes = {
-  //   someProperty: PropTypes.object,
-  //   someSetting: PropTypes.bool.isRequired,
-  // }
-  //
-  // // Defaults for props
-  // static defaultProps = {
-  //   someSetting: false
-  // }
 
   renderPlayerGrid = () => {
     return this.props.grid.map(square => {

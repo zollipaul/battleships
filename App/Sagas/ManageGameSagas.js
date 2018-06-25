@@ -14,6 +14,7 @@ import { call, put, select, take } from "redux-saga/effects";
 import ManageGameActions from "../Redux/ManageGameRedux";
 import GamesActions from "../Redux/GamesRedux";
 import { GameViewSelectors } from "../Redux/GameViewRedux";
+import { GamesSelectors } from "../Redux/GamesRedux";
 import { NavigationActions } from "react-navigation";
 import GameViewActions from "../Redux/GameViewRedux";
 import ShipsActions from "../Redux/ShipsRedux";
@@ -29,13 +30,10 @@ export function* createGame(api, action) {
   // const currentData = yield select(GamesSelectors.getData)
   // make the call to the api
   const response = yield call(api.createGame, data);
-  console.log(response);
-
   // success?
   if (response.ok) {
     yield put(ManageGameActions.createGameSuccess(response.data));
-    yield put(GamesActions.getGamesRequest());
-    yield put(GameViewActions.gameViewRequest(response.data.gamePlayerId));
+    yield call(controller, response.data.gamePlayerId);
   } else {
     yield put(ManageGameActions.createGameFailure());
   }
@@ -43,20 +41,16 @@ export function* createGame(api, action) {
 
 export function* changeGame(action) {
   const { payload } = action;
-  yield put(GamesActions.getGamesRequest());
-  yield put(GameViewActions.gameViewRequest(payload));
+  yield call(controller, payload);
 }
 
 export function* joinGame(api, action) {
   const { data } = action;
   const response = yield call(api.joinGame, data);
-  console.log(response);
-
   // success?
   if (response.ok) {
     yield put(ManageGameActions.joinGameSuccess(response.data));
-    yield put(GamesActions.getGamesRequest());
-    yield put(GameViewActions.gameViewRequest(response.data.gamePlayerId));
+    yield call(controller, response.data.gamePlayerId);
   } else {
     yield put(ManageGameActions.joinGameFailure());
   }
@@ -69,55 +63,66 @@ export function* startGame(api, action) {
   const shipsArray = ShipsToArray(ships);
 
   const response = yield call(api.postShips, gamePlayerId, shipsArray);
-  console.log(response);
-
   // success?
   if (response.ok) {
     yield put(ManageGameActions.startGameSuccess(response.data));
-    yield put(GameViewActions.gameViewRequest(gamePlayerId));
+    yield call(controller, gamePlayerId);
   } else {
     yield put(ManageGameActions.startGameFailure());
   }
 }
 
-export function* postSalvoes(api) {
-  console.log('postSalvoes')
+export function* clickOnGameInTabBar() {
+  const gameView = yield select(GameViewSelectors.getGameView);
+  const games = yield select(GamesSelectors.getGames);
+  if (games.currentUser === null ) {
+    yield put(NavigationActions.navigate({ routeName: "GameTabLoggedOut" }));
+  } else if (gameView === null) {
+    yield put(NavigationActions.navigate({ routeName: "GameTabNoActiveGame" }));
+  } else {
+    const gamePlayerId = yield select(GameViewSelectors.getGamePlayerId);
+    yield call(controller, gamePlayerId);
+  }
+}
 
+export function* postSalvoes(api) {
   const salvoes = yield select(ManageGameReduxSelectors.getSalvoes);
   const turn = yield select(GameViewSelectors.getTurn);
   // convert to object for java backend
   const salvoObject = SalvoesToObject(turn, salvoes);
   const gamePlayerId = yield select(GameViewSelectors.getGamePlayerId);
   const response = yield call(api.postSalvoes, gamePlayerId, salvoObject);
-
-  console.log(response)
   if (response.ok) {
     yield put(ManageGameActions.postSalvoesSuccess(response.data));
+    // yield call(controller, gamePlayerId);
     yield put(GameViewActions.gameViewRequest(gamePlayerId));
-    yield put(SalvoActions.resetAllSalvoes());
   } else {
     yield put(ManageGameActions.postSalvoesFailure());
   }
 }
-//
-// export function* watchEndOfTurn(api) {
-//   while (yield take("TOGGLE_SALVO")) {
-//     const salvoes = yield select(ManageGameReduxSelectors.getSalvoes);
-//     const turn = yield select (GameViewSelectors.getTurn)
-//
-//     // convert to object for java backend
-//     const salvoObject = SalvoesToObject(turn, salvoes);
-//
-//     if (salvoes.length === 5) {
-//       const gamePlayerId = yield select(GameViewSelectors.getGamePlayerId);
-//       const response = yield call(api.postSalvoes, gamePlayerId, salvoObject);
-//       if (response.ok) {
-//         yield put(ManageGameActions.endTurnSuccess(response.data));
-//         yield put(GameViewActions.gameViewRequest(gamePlayerId));
-//         yield put(SalvoActions.resetAllSalvoes());
-//       } else {
-//         yield put(ManageGameActions.endTurnFailure());
-//       }
-//     }
-//   }
-// }
+
+function* controller(gamePlayerId) {
+  yield put(GamesActions.getGamesRequest());
+  yield put(GameViewActions.gameViewRequest(gamePlayerId));
+  const gameView = yield take("GAME_VIEW_SUCCESS");
+  yield call(navigation, gameView.payload.stage);
+}
+
+export function* navigation(stage) {
+  if (stage === "placingShips") {
+    // first reset ships
+    yield put(NavigationActions.navigate({ routeName: "PlacingShipsScreen" }));
+    yield put(ShipsActions.resetAllShips());
+    yield put(SalvoActions.resetAllSalvoes());
+  } else if (
+    stage === "waitingForJoiningOpponent" ||
+    stage === "waitingForPlacingShipsOfOpponent"
+  ) {
+    yield put(
+      NavigationActions.navigate({ routeName: "WaitingForOpponentScreen" })
+    );
+  } else {
+    yield put(NavigationActions.navigate({ routeName: "GamePlayScreen" }));
+    yield put(SalvoActions.resetAllSalvoes());
+  }
+}

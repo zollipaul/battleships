@@ -2,22 +2,12 @@ import React, { Component } from "react";
 // import PropTypes from 'prop-types';
 import styles from "./Styles/GameListItemStyle";
 import { Text, TouchableOpacity } from "react-native";
+import Immutable from 'seamless-immutable'
 
 class GameListItem extends Component {
   constructor(props) {
     super(props);
   }
-
-  // // Prop type warnings
-  // static propTypes = {
-  //   someProperty: PropTypes.object,
-  //   someSetting: PropTypes.bool.isRequired,
-  // }
-  //
-  // // Defaults for props
-  // static defaultProps = {
-  //   someSetting: false
-  // }
 
   render() {
     const game = this.props.item;

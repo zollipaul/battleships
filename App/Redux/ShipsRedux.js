@@ -34,14 +34,15 @@ export const ShipsSelectors = {
 export const pushShip = (state, action) => {
   const { data } = action;
   const id = data.id;
+
+  console.log(data)
   return (
     state
       .setIn(["data", [id]], data.ship)
-
       // for counting the ships, set in store
       .merge({
         counter:
-          state.data[id].location.length === 0
+          (state.data[id].location.length === 0) && data.ship.location.length !== 0
             ? state.counter + 1
             : state.counter
       })

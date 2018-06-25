@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import { PanResponder, Animated } from "react-native";
 import { connect } from "react-redux";
 import ShipActions from "../Redux/ShipsRedux";
@@ -7,8 +7,9 @@ import getChars from "../Data/getChars";
 // Styles & Metrics
 import styles from "./Styles/ShipStyle";
 import { Metrics, Images } from "../Themes/";
+import ReactNativeHapticFeedback from "react-native-haptic-feedback";
 
-class Ship extends Component {
+class Ship extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -16,6 +17,7 @@ class Ship extends Component {
       size: props.ship.size,
       pan: new Animated.ValueXY({ x: 0, y: 0 }),
       spin: new Animated.Value(0),
+      rotation: new Animated.Value(0),
       swing: new Animated.Value(0),
       nextRotationIsSpin: false,
       locationX: 0,
@@ -29,8 +31,12 @@ class Ship extends Component {
     this._val = { x: 0, y: 0 };
     this.state.pan.addListener(value => (this._val = value));
     const squareLength = Metrics.placingShipsSquareLength;
-
     // Initialize PanResponder with move handling
+
+    // let onceAlpha1 = true
+    // let alphaStart, alphaEnd;
+    let previousTimeStamp = 0;
+    this._startingPosition = true;
     this.panResponder = PanResponder.create({
       // Ask to be the responder:
       onStartShouldSetPanResponder: (e, gesture) => true,
@@ -42,27 +48,89 @@ class Ship extends Component {
         //   "touch rel. element: " + e.nativeEvent.locationX,
         //   e.nativeEvent.locationY
         // );
+
+        this.state.rotation.extractOffset();
+
         this.setState({
           locationX: e.nativeEvent.locationX,
           locationY: e.nativeEvent.locationY
         });
       },
       // ignore first argument, only interested in second argument, which updates Animated View location
-      onPanResponderMove:
-        //   (evt, gesture) => {
-        //
-        //   this.state.gridPan.setValue({x: gesture.dx, y: gesture.dy})
-        //   // console.log(this._val)
-        // },
+      onPanResponderMove: (e, gesture) => {
+        this.state.pan.setValue({ x: gesture.dx, y: gesture.dy });
+        // console.log(this._val)
 
-        Animated.event([null, { dx: this.state.pan.x, dy: this.state.pan.y }]),
+        // const horizontal = this.props.ships.data[this.state.id].horizontal;
+        // const middleOfShip = horizontal ? { x: squareLength * this.state.size / 2, y: 0.5 * squareLength } : { x: 0.5 * squareLength, y: squareLength * this.state.size / 2 };
+        //
+        // if (e.nativeEvent.touches.length === 1) {
+        //   onceAlpha1 = true;
+        // }
+        //
+        // console.log(gesture.numberActiveTouches);
+        // console.log(e.nativeEvent.touches);
+        //
+        // console.log("locX, locY" + e.nativeEvent.touches[0].locationX, e.nativeEvent.touches[0].locationY);
+        //
+        // // if (e.nativeEvent.touches.length === 2) {
+        //   this.state.rotation.setValue(alphaEnd - alphaStart);
+        //
+        //   if (onceAlpha1) {
+        //     // alphaStart =
+        //     //   Math.atan2(
+        //     //     e.nativeEvent.touches[0].locationY - middleOfShip.y,
+        //     //     e.nativeEvent.touches[0].locationX - middleOfShip.x
+        //     //   ) *
+        //     //   (180 / Math.PI);
+        //     // onceAlpha1 = false
+        //
+        //     alphaStart = Math.atan2(e.nativeEvent.touches[0].pageY - e.nativeEvent.touches[1].pageY, e.nativeEvent.touches[0].pageX - e.nativeEvent.touches[1].pageX) * (180 / Math.PI);
+        //     onceAlpha1 = false;
+        //   }
+        //
+        //   // alphaEnd =
+        //   //   Math.atan2(
+        //   //     e.nativeEvent.touches[0].locationY - middleOfShip.y,
+        //   //     e.nativeEvent.touches[0].locationX - middleOfShip.x
+        //   //   ) *
+        //   //   (180 / Math.PI);
+        //
+        //   alphaEnd = Math.atan2(e.nativeEvent.touches[0].pageY - e.nativeEvent.touches[1].pageY, e.nativeEvent.touches[0].pageX - e.nativeEvent.touches[1].pageX) * (180 / Math.PI);
+        //
+        //   console.log("alphastart, alphaend " + alphaStart, alphaEnd);
+        //
+        //   console.log(alphaEnd - alphaStart);
+
+        // console.log(
+        //   "middleOfShipX, Y: " +
+        //   (e.nativeEvent.changedTouches[0].locationX - middleOfShip.x),
+        //   (e.nativeEvent.changedTouches[0].locationY - middleOfShip.y)
+        // );
+
+        // const alpha2 =
+        //   Math.atan2(
+        //     e.nativeEvent.changedTouches[1].locationY - middleOfShip.y,
+        //     e.nativeEvent.changedTouches[1].locationX - middleOfShip.x
+        //   ) *
+        //   (180 / Math.PI);
+        // console.log(alpha1, alpha2);
+        // }
+
+        // console.log(e.nativeEvent.changedTouches[0].locationY)
+        // console.log(e.nativeEvent.changedTouches[0].locationX)
+        // console.log(gesture.numberActiveTouches);
+        // };,
+      },
+      // Animated.event([null, { dx: this.state.pan.x, dy: this.state.pan.y }]),
       onPanResponderRelease: (e, gesture) => {
         const horizontal = this.props.ships.data[this.state.id].horizontal;
+
         const prevShipXLocation = this.props.ships.data[this.state.id]
           .coordinates.shipXLocation;
         const prevShipYLocation = this.props.ships.data[this.state.id]
           .coordinates.shipYLocation;
-        console.log("moveX: " + gesture.moveX + " moveY: " + gesture.moveY);
+        // console.log("moveX: " + gesture.moveX + " moveY: " + gesture.moveY);
         // console.log("pageX: " + e.nativeEvent.pageX + " pageY: " + e.nativeEvent.pageY);
         // console.log("x0: "+ gesture.x0 + " y0: " + gesture.y0)
         // console.log(
@@ -70,7 +138,7 @@ class Ship extends Component {
         //   e.nativeEvent.locationY
         // );
         // console.log('horizontal: ' + horizontal)
-        console.log('dx, dy: ' + gesture.dx, gesture.dy)
+        // console.log("dx, dy: " + gesture.dx, gesture.dy);
 
         // get px and py of gridPosition
         const { px, py } = this.props.gridPosition;
@@ -108,9 +176,10 @@ class Ship extends Component {
         const sluY = shipYLocation * squareLength + py;
         // console.log("left upper of next square: " + sluX, sluY)
 
-        // detect if touch without movement, then rotate ship
-        if (this.shipTouched(gesture)) {
-          console.log("ship touched");
+        // detect if double tap
+        const currentTimeStamp = e.nativeEvent.timestamp;
+        const dt = currentTimeStamp - previousTimeStamp;
+        if (dt < 500) {
           const {
             shipXLocationAfterRotation,
             shipYLocationAfterRotation
@@ -126,17 +195,24 @@ class Ship extends Component {
               shipXLocationAfterRotation,
               shipYLocationAfterRotation,
               alignmentAfterRotation
-            )
+            ) &&
+            !this._startingPosition
           ) {
-            // swing rotation to show error
             console.log("swing error: ship out of grid");
+            ReactNativeHapticFeedback.trigger("notificationError", false);
             this.setState({ nextRotationIsSpin: false });
             Animated.spring(this.state.swing, {
               toValue: 1,
               duration: 200
-            }).start(this.state.swing.setValue(0));
+            }).start(() => {
+              this.state.swing.setValue(0);
+            });
           } else {
             console.log("ship 90 deg rotation");
+            ReactNativeHapticFeedback.trigger("impactLight", false);
+
+            this.props.disableRotationTip()
+
             this.setState({ nextRotationIsSpin: true });
             Animated.parallel([
               Animated.timing(this.state.spin, {
@@ -147,13 +223,21 @@ class Ship extends Component {
             ]).start(() => {
               // console.log("after spin: "+ this.state.spin._value)
               this._lastPos = this._val;
-              this.pushShip(
-                shipXLocationAfterRotation,
-                shipYLocationAfterRotation,
-                alignmentAfterRotation
-              );
+
+              if (this._startingPosition) {
+                this.pushOnlyNewAlignment(alignmentAfterRotation);
+              } else {
+                this.pushShip(
+                  shipXLocationAfterRotation,
+                  shipYLocationAfterRotation,
+                  alignmentAfterRotation
+                );
+              }
             });
           }
+          // set previousTimeStamp for double tap
+        } else if (this.shipTouched(gesture)) {
+          previousTimeStamp = currentTimeStamp;
         }
 
         // if n on left or right side outside, if m upper or lower side outside --> back to start
@@ -164,7 +248,10 @@ class Ship extends Component {
             horizontal
           )
         ) {
+          this._startingPosition = true;
           console.log("ship back to starting position");
+          ReactNativeHapticFeedback.trigger("notificationError", false);
+
           Animated.parallel([
             Animated.timing(this.state.pan, {
               toValue: { x: this._lastPos.x * -1, y: this._lastPos.y * -1 },
@@ -183,6 +270,9 @@ class Ship extends Component {
           // adjust to left upper corner of the closest square
         } else {
           console.log("ship adjusted to grid");
+          this._startingPosition = false;
+          ReactNativeHapticFeedback.trigger("impactLight", false);
+
           Animated.timing(this.state.pan, {
             toValue: { x: sluX - luX0, y: sluY - luY0 },
             duration: 200,
@@ -191,7 +281,6 @@ class Ship extends Component {
           }).start(() => {
             this._lastPos = this._val;
           });
-
           this.pushShip(shipXLocation, shipYLocation, horizontal);
         }
       }
@@ -250,7 +339,6 @@ class Ship extends Component {
   calculateLocationsArray = (shipXLocation, shipYLocation, horizontal) => {
     const size = this.props.ship.size;
     let shipLocations = [];
-
     for (let i = 0; i < size; i++) {
       shipLocations.push(
         horizontal
@@ -310,6 +398,22 @@ class Ship extends Component {
     }
   };
 
+  pushOnlyNewAlignment = horizontal => {
+    this.props.pushShipToStore({
+      id: this.props.ship.id,
+      ship: {
+        type: this.props.ship.type,
+        size: this.props.ship.size,
+        horizontal: horizontal,
+        coordinates: {
+          shipXLocation: 0,
+          shipYLocation: 0
+        },
+        location: []
+      }
+    });
+  };
+
   pushShip = (shipXLocation, shipYLocation, horizontal) => {
     this.props.pushShipToStore({
       id: this.props.ship.id,
@@ -352,8 +456,6 @@ class Ship extends Component {
   };
 
   render() {
-    console.log("render");
-
     const panStyle = {
       transform: [
         {
@@ -364,6 +466,10 @@ class Ship extends Component {
         },
         {
           rotate: this.spinOrSwing()
+          // rotate: this.state.rotation.interpolate({
+          //   inputRange: [-180, -90, 0, 90, 180],
+          //   outputRange: ["0deg", "90deg", "180deg", "270deg", "360deg"]
+          // })
         }
       ]
     };

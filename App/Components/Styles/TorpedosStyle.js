@@ -11,7 +11,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center'
   },
-  torpedo: {
+  torpedoUp: {
     width: Metrics.gamePlayOpponentGridWidth * .15,
     height: Metrics.gamePlayOpponentGridWidth * .15
   },

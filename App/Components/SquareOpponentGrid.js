@@ -1,46 +1,75 @@
-import React, { Component } from "react";
-import { Animated, Text, View } from "react-native";
+import React, { Component, PureComponent } from "react";
+import { Text, View } from "react-native";
 // Styles
 import styles from "./Styles/SquareOpponentGrid";
 import Salvo from "./Salvo";
+import Dot from "./Dot";
+import Shot from "../Components/Shot";
+
 import { Colors } from "../Themes";
 
-class SquareOpponentGrid extends Component {
+class SquareOpponentGrid extends PureComponent {
   constructor(props) {
     super(props);
+    this.state = {
+      switch: false
+    };
   }
 
-  colorSalvo = square => {
-    return square.ship.isShip ? Colors.bloodOrange : Colors.frost;
+  colorSalvo = () => {
+    return this.props.isShip ? Colors.bloodOrange : Colors.frost;
   };
 
-  renderContent = square => {
+  renderContent = () => {
     // numbers and letters of grid
-    if (square.title || square.id === "00") {
-      return <Text style={styles.label}>{square.title}</Text>;
+    if (this.props.title || this.props.id === "00") {
+      return <Text style={styles.label}>{this.props.title}</Text>;
     }
 
-    if (this.props.square.salvo || this.props.newSalvo) {
+    // oldSalvo
+    else if (this.props.salvo) {
       return (
-        <Salvo length={this.props.length} color={this.colorSalvo(square)} />
+        <Salvo length={this.props.length} color={this.colorSalvo()} />
       );
     }
+
+    // newSalvo
+    else if (this.props.newSalvo) {
+      return <Dot length={this.props.length} color={this.colorSalvo()} />;
+    }
   };
 
+  shoot() {
+    if (this.props.shootNow) {
+      return (
+        <Shot
+          shotPosition={{
+            locationX: this.props.length / 2,
+            locationY: this.props.length / 2
+          }}
+          resetShoot={this.props.resetShoot}
+          id={this.props.newSalvoId}
+        />
+      );
+    }
+  }
+
   render() {
-    const square = this.props.square;
+    if (this.props.id === "A3") {
+      console.log(this.props);
+    }
 
     let backgroundStyle, borderStyle;
-    if (square.ship.isShip) {
+    if (this.props.isShip) {
       backgroundStyle = styles.shipBackground;
       borderStyle =
         styles[
           "horizontal" +
-            (square.ship.horizontal ? "True" : "False") +
+            (this.props.horizontal ? "True" : "False") +
             "AndPart" +
-            square.ship.part
+            this.props.part
         ];
-    } else if (square.hit) {
+    } else if (this.props.hit) {
       backgroundStyle = styles.hitBackground;
       borderStyle = styles.standardBorder;
     } else if (this.props.newSalvo) {
@@ -60,7 +89,8 @@ class SquareOpponentGrid extends Component {
         ]}
         pointerEvents="none"
       >
-        {this.renderContent(square)}
+        {this.renderContent()}
+        {this.shoot()}
       </View>
     );
   }

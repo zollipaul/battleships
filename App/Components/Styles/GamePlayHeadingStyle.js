@@ -13,6 +13,10 @@ export default StyleSheet.create({
   stage: {
     fontSize: 14,
     color: Colors.text
+  },
+  hurry: {
+    fontSize: 12,
+    color: Colors.bloodOrange
 
   },
 })

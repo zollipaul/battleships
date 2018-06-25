@@ -14,7 +14,7 @@ export const reducers = combineReducers({
   games: require('./GamesRedux').reducer,
   gameView: require('./GameViewRedux').reducer,
   leaderboard: require('./LeaderboardRedux').reducer,
-  activeGamePlayerId: require('./ManageGameRedux').reducer,
+  // activeGamePlayerId: require('./ManageGameRedux').reducer,
   ships: require('./ShipsRedux').reducer,
   salvoes: require('./SalvoRedux').reducer,
 })

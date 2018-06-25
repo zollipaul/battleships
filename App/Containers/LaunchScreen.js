@@ -1,14 +1,8 @@
-import React, { Component } from "react";
-import {
-  FlatList,
-  TouchableOpacity,
-  Text,
-  View
-} from "react-native";
+import React, { PureComponent } from "react";
+import { SectionList, TouchableOpacity, Text, View } from "react-native";
 import { connect } from "react-redux";
 import GameListItem from "../Components/GameListItem";
 import PlayersActions from "../Redux/PlayersRedux";
-import GamesActions from "../Redux/GamesRedux";
 import ManageGameActions from "../Redux/ManageGameRedux";
 import LoginAndSignUp from "../Components/LoginAndSignUp";
 import Icon from "react-native-vector-icons/FontAwesome";
@@ -19,7 +13,7 @@ import { Colors } from "../Themes";
 
 // More info here: https://facebook.github.io/react-native/docs/flatlist.html
 
-class LaunchScreen extends Component {
+class LaunchScreen extends PureComponent {
   /************************************************************
    * STEP 1
    * This is an array of objects with the properties you desire
@@ -34,12 +28,6 @@ class LaunchScreen extends Component {
     };
   }
 
-  componentDidMount() {
-    this.props.getGames();
-  }
-
-  // class GamesFlatList extends React.PureComponent { --> why not use purecomponent
-
   /************************************************************
    * STEP 2
    * `renderRow` function. How each cell/row should be rendered
@@ -48,6 +36,31 @@ class LaunchScreen extends Component {
    * e.g.
    return <MyCustomCell title={item.title} description={item.description} />
    *************************************************************/
+
+  renderSectionHeader = ({ section }) => {
+    switch (section.key) {
+      case "currentPlayersGames":
+        return (
+          <View style={styles.sectionHeader}>
+            <Text style={styles.sectionHeaderText}>My Games</Text>
+          </View>
+        );
+      case "joinableGames":
+        if (section.data.length !== 0)
+          return (
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionHeaderText}>Join</Text>
+            </View>
+          );
+        break;
+      default:
+        return (
+          <View style={styles.sectionHeader}>
+            <Text style={styles.sectionHeaderText}>Games</Text>
+          </View>
+        );
+    }
+  }
 
   renderRow = ({ item }) => {
     return (
@@ -65,10 +78,6 @@ class LaunchScreen extends Component {
    * Consider the configurations we've set below.  Customize them
    * to your liking!  Each with some friendly advice.
    *************************************************************/
-  // // Render a header?
-  // renderHeader = () => (
-  //   <Text style={[styles.label, styles.sectionHeader]}>Games</Text>
-  // );
 
   // Render a footer?
   renderFooter = () => (
@@ -108,18 +117,15 @@ class LaunchScreen extends Component {
     return this.props.games !== null ? (
       <View style={styles.container}>
         {this.renderLoginAndSignUp()}
-        <FlatList
+        <SectionList
+          renderSectionHeader={this.renderSectionHeader}
+          sections={this.props.games.games}
           contentContainerStyle={styles.listContent}
-          data={this.props.games.games}
           renderItem={this.renderRow}
           keyExtractor={this.keyExtractor}
           initialNumToRender={this.oneScreensWorth}
-          // ListHeaderComponent={this.renderHeader}
-          /*
-            ListFooterComponent={this.renderFooter}
-  */
           ListEmptyComponent={this.renderEmpty}
-          ItemSeparatorComponent={this.renderSeparator}
+          // ItemSeparatorComponent={this.renderSeparator}
         />
         <TouchableOpacity
           onPress={() => {
@@ -129,7 +135,6 @@ class LaunchScreen extends Component {
           <Icon name="plus" size={40} color={Colors.snow} />
         </TouchableOpacity>
         )
-        {/*<DevscreensButton />*/}
       </View>
     ) : (
       <Text>Loading</Text>
@@ -157,9 +162,6 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
   return {
-    getGames: () => {
-      dispatch(GamesActions.getGamesRequest());
-    },
     createGame: () => {
       dispatch(ManageGameActions.createGameRequest());
     },

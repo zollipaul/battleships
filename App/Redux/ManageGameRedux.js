@@ -10,6 +10,8 @@ const { Types, Creators } = createActions({
 
   changeGame: ["payload"],
 
+  clickOnGameInTabBar: null,
+
   joinGameRequest: ["data"],
   joinGameSuccess: ["payload"],
   joinGameFailure: null,
@@ -68,6 +70,11 @@ export const changeGame = (state, action) => {
   return state.merge({ payload });
 };
 
+export const clickOnGameInTabBar = state => {
+  return state;
+};
+
+
 
 /* ------------- Hookup Reducers To Types ------------- */
 
@@ -89,4 +96,6 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.POST_SALVOES_REQUEST]: request,
   [Types.POST_SALVOES_SUCCESS]: success,
   [Types.POST_SALVOES_FAILURE]: failure,
+
+  [Types.CLICK_ON_GAME_IN_TAB_BAR]: clickOnGameInTabBar
 });

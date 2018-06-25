@@ -1,9 +1,10 @@
-import React, { Component } from "react";
-import RoundedButton from "../Components/RoundedButton";
+import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import ManageGameActions from "../Redux/ManageGameRedux";
+import { Text, TouchableOpacity } from "react-native";
+import styles from "./Styles/PlayButtonStyle";
 
-class PlayButton extends Component {
+class PlayButton extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
@@ -11,15 +12,16 @@ class PlayButton extends Component {
 
   render() {
     const active = this.props.shipsCounter === 5;
-    const text = active ? 'Play now' : 'Place your Ships'
-    return (
-      <RoundedButton
-        text={text}
+    // const text = active ? "Play now" : "Place your Ships";
+
+    return active ? (
+      <TouchableOpacity
+        style={styles.button}
         onPress={() => this.props.startGame()}
-        style={active ? "active" : "inactive"}
-        disabled={!active}
-      />
-    );
+      >
+        <Text style={styles.buttonText}>Play now</Text>
+      </TouchableOpacity>
+    ) : null;
   }
 }
 

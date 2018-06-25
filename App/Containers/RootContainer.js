@@ -11,8 +11,13 @@ import styles from './Styles/RootContainerStyles'
 
 class RootContainer extends Component {
   componentDidMount () {
+
+    console.log('copmonent did mount root')
+
     // if redux persist is not active fire startup action
     if (!ReduxPersist.active) {
+
+      console.log('reduxPersistNotActive')
       this.props.startup()
     }
   }

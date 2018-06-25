@@ -1,4 +1,10 @@
-export default string => {
+export default games => {
+  return games.map(gamesList => {
+   return gamesList.data.map(game => (game["created"] = convertLocalDates(game.created)));
+  });
+};
+
+const convertLocalDates = string => {
   let d = new Date(string);
 
   const options = {

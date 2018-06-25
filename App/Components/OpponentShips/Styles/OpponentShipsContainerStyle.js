@@ -5,12 +5,12 @@ export default StyleSheet.create({
   container: {
     flex: 1,
     height: Metrics.gamePlayPlayerGridWidth/2,
-    justifyContent: "space-around",
+    justifyContent: "flex-end",
     alignItems: 'center'
   },
   row: {
-    flex: 1,
     flexDirection: 'row',
-    justifyContent: "space-around",
+    justifyContent: "center",
+    alignItems: 'center'
   },
 });

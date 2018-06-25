@@ -24,14 +24,14 @@ class Square extends Component {
   render() {
     const square = this.props.square;
     let backgroundStyle, borderStyle;
-    if (square.ship.isShip) {
+    if (square.isShip) {
       backgroundStyle = styles.shipBackground;
       borderStyle =
         styles[
           "horizontal" +
-            (square.ship.horizontal ? "True" : "False") +
+            (square.horizontal ? "True" : "False") +
             "AndPart" +
-            square.ship.part
+            square.part
         ];
     } else {
       borderStyle = styles.standardBorder;

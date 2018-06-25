@@ -4,16 +4,22 @@ import { connect } from "react-redux";
 import GamePlayPlayerGrid from "../Components/GamePlayPlayerGrid";
 import GamePlayOpponentGrid from "./GamePlayOpponentGrid";
 import SalvoActions from "../Redux/SalvoRedux";
-
-// Styles
-import styles from "./Styles/GamePlayScreenStyle";
 import OpponentShipsContainer from "../Components/OpponentShips/OpponentShipsContainer";
 import GamePlayHeading from "../Components/GamePlayHeading";
+// Styles
+import styles from "./Styles/GamePlayScreenStyle";
 
 class PlacingShipsScreen extends Component {
   constructor(props) {
     super(props);
   }
+
+  getOpponentName = () => {
+    if (this.props.gameView.game.gamePlayers.length === 2)
+      return this.props.gameView.game.gamePlayers.filter(
+        gamePlayer => gamePlayer.id === this.props.gameView.opponentId
+      )[0].player.userName;
+  };
 
   render() {
     if (this.props.gameView !== null) {
@@ -29,8 +35,8 @@ class PlacingShipsScreen extends Component {
                 stage={this.props.gameView.stage}
                 winner={this.props.gameView.winner}
                 salvoesLeft={5 - this.props.salvoes.length}
+                opponent={this.getOpponentName()}
               />
-
               <OpponentShipsContainer sinks={this.props.gameView.sinks} />
             </View>
           </View>

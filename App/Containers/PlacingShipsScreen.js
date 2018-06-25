@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import { Text, View } from "react-native";
 import { connect } from "react-redux";
 import PlayButton from "./PlayButton";
@@ -9,7 +9,7 @@ import ShipsContainer from "../Components/ShipsContainer";
 // Styles
 import styles from "./Styles/PlacingShipsStyles";
 
-class PlacingShipsScreen extends Component {
+class PlacingShipsScreen extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
@@ -37,7 +37,7 @@ class PlacingShipsScreen extends Component {
 
 const mapStateToProps = state => {
   return {
-    gameView: state.gameView
+    gameView: state.gameView,
   };
 };
 

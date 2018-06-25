@@ -30,7 +30,6 @@ export default StyleSheet.create({
     justifyContent: 'flex-start',
   },
   titleView: {
-    // flex: 1,
   },
   logoutView: {
     flex: 1,

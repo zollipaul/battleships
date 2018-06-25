@@ -7,11 +7,9 @@ export default data => {
       gameGridEmpty[row + col] = {
         id: row + col,
         title: getTitle(row, col),
-        ship: {
-          isShip: false,
-          horizontal: null,
-          part: null
-        },
+        isShip: false,
+        horizontal: null,
+        part: null,
         salvo: false,
         newSalvo: false,
         hit: false
@@ -35,12 +33,10 @@ export default data => {
       ship.locations[0].charAt(0) === ship.locations[1].charAt(0);
 
     ship.locations.forEach((location, i) => {
-      gameGridsOfPlayerAndOpponent[playerId][location].ship = {
-        isShip: true,
-        horizontal: horizontal,
-        part:
-          i === 0 ? "Start" : i === ship.locations.length - 1 ? "End" : "Mid"
-      };
+
+      gameGridsOfPlayerAndOpponent[playerId][location].isShip = true
+      gameGridsOfPlayerAndOpponent[playerId][location].horizontal = horizontal
+      gameGridsOfPlayerAndOpponent[playerId][location].part = i === 0 ? "Start" : i === ship.locations.length - 1 ? "End" : "Mid"
     });
   });
 
@@ -56,12 +52,10 @@ export default data => {
       ship.locations[0].charAt(0) === ship.locations[1].charAt(0);
 
     ship.locations.forEach((location, i) => {
-      gameGridsOfPlayerAndOpponent[opponentId][location].ship = {
-        isShip: true,
-        horizontal: horizontal,
-        part:
-          i === 0 ? "Start" : i === ship.locations.length - 1 ? "End" : "Mid"
-      };
+
+      gameGridsOfPlayerAndOpponent[opponentId][location].isShip = true
+      gameGridsOfPlayerAndOpponent[opponentId][location].horizontal = horizontal
+      gameGridsOfPlayerAndOpponent[opponentId][location].part = i === 0 ? "Start" : i === ship.locations.length - 1 ? "End" : "Mid"
     });
   });
 

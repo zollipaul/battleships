@@ -2,11 +2,6 @@ import { StyleSheet } from 'react-native'
 import { Colors, Metrics, Images } from '../../Themes/'
 
 export default StyleSheet.create({
-  container: {
-    flex: 1,
-    marginTop: Metrics.navBarHeight,
-    backgroundColor: Colors.background
-  },
   aircraftCarrier: {
     backgroundColor: "skyblue",
     width: Metrics.placingShipsSquareLength*5,

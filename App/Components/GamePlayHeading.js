@@ -1,20 +1,20 @@
-import PropTypes from "prop-types";
+// @flow
+
 import React, { Component } from "react";
 import { View, Text, ActivityIndicator } from "react-native";
 import styles from "./Styles/GamePlayHeadingStyle";
 import { Colors } from "../Themes";
 
-export default class GamePlayHeading extends Component {
-  static propTypes = {
-    stage: PropTypes.string,
-    turn: PropTypes.number,
-    winner: PropTypes.string,
-    salvoesLeft: PropTypes.number
-  };
+type Props = {
+  salvoesLeft: number,
+  stage: number,
+  opponent: string,
+  turn: number
+};
 
-  salvoes = () => {
+export default class GamePlayHeading extends Component<Props> {
+  salvoText = () => {
     const salvoesLeft = this.props.salvoesLeft;
-
     return salvoesLeft === 1
       ? "Fire one Shot away!"
       : salvoesLeft === 0
@@ -23,11 +23,22 @@ export default class GamePlayHeading extends Component {
   };
 
   renderStage = () => {
-    if (this.props.stage === "waitingForSalvoesOfPlayer") {
-      return <Text style={styles.stage}>{this.salvoes()}</Text>;
+    if (this.props.stage === "myTurnAndOpponentHasNotShot") {
+      return <Text style={styles.stage}>{this.salvoText()}</Text>;
     }
 
-    if (this.props.stage === "waitingForSalvoesOfOpponent") {
+    if (this.props.stage === "myTurnAndOpponentHasShot") {
+      return (
+        <View>
+          <Text style={styles.stage}>{this.salvoText()}</Text>
+          <Text style={styles.hurry}>
+            Hurry up, {this.props.opponent} is waiting for you!
+          </Text>
+        </View>
+      );
+    }
+
+    if (this.props.stage === "waitingForSalvoOfOpponent") {
       return (
         <View>
           <Text style={styles.stage}>Waiting on opponent</Text>)

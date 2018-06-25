@@ -1,22 +1,10 @@
-import React, { Component } from 'react'
-// import PropTypes from 'prop-types';
-import { Animated, Image } from 'react-native'
-import styles from './Styles/TorpedosStyle'
-import { Images } from '../Themes'
+import React, { PureComponent } from "react";
+import { Animated, Image } from "react-native";
+import styles from "./Styles/TorpedosStyle";
+import { Images } from "../Themes";
 
-export default class Torpedos extends Component {
-  // // Prop type warnings
-  // static propTypes = {
-  //   someProperty: PropTypes.object,
-  //   someSetting: PropTypes.bool.isRequired,
-  // }
-  //
-  // // Defaults for props
-  // static defaultProps = {
-  //   someSetting: false
-  // }
-
-  render () {
+export default class Torpedos extends PureComponent {
+  render() {
     const interpolateOpacity = this.props.gridPan.interpolate({
       inputRange: [20, 120],
       outputRange: [0, 1]
@@ -39,36 +27,38 @@ export default class Torpedos extends Component {
       ]
     };
 
+    console.log('renderTorpedos')
+
     return (
       <Animated.View
         style={[styles.shootContainer, shootOpacity, interpolateYStyle]}
       >
         <Image
-          source={Images.torpedo}
-          style={styles.torpedo}
+          source={Images.torpedoUp}
+          style={styles.torpedoUp}
           resizeMode="cover"
         />
         <Image
-          source={Images.torpedo}
-          style={styles.torpedo}
+          source={Images.torpedoUp}
+          style={styles.torpedoUp}
           resizeMode="cover"
         />
         <Image
-          source={Images.torpedo}
-          style={styles.torpedo}
+          source={Images.torpedoUp}
+          style={styles.torpedoUp}
           resizeMode="cover"
         />
         <Image
-          source={Images.torpedo}
-          style={styles.torpedo}
+          source={Images.torpedoUp}
+          style={styles.torpedoUp}
           resizeMode="cover"
         />
         <Image
-          source={Images.torpedo}
-          style={styles.torpedo}
+          source={Images.torpedoUp}
+          style={styles.torpedoUp}
           resizeMode="cover"
         />
       </Animated.View>
     );
-  };
+  }
 }

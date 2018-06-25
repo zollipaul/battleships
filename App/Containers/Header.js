@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { connect } from "react-redux";
 import PlayersActions from "../Redux/PlayersRedux";
+import Immutable from "seamless-immutable";
 
 // Styles
 import styles from "./Styles/HeaderStyle";
@@ -12,17 +13,16 @@ class Header extends Component {
   }
 
   renderTitleOfGameScreens = () => {
-    const game = this.props.gameView.payload.game;
-
-    const gamePlayer2 = game.gamePlayers[1] ? (
-      <Text>{game.gamePlayers[1].player.userName} </Text>
+    const gamePlayers  = this.props.gameView.payload.game.gamePlayers;
+    const gamePlayer2 = gamePlayers[1] ? (
+      <Text>{gamePlayers[1].player.userName} </Text>
     ) : (
       <Text>No second Player yet...</Text>
     );
 
     return (
       <Text style={styles.headerTitle}>
-        {game.gamePlayers[0].player.userName} vs {gamePlayer2}
+        {gamePlayers[0].player.userName} vs {gamePlayer2}
       </Text>
     );
   };
@@ -44,7 +44,7 @@ class Header extends Component {
         );
       }
 
-      // Logged in
+      // Logged in, AllGamesTab
       if (routeName === "LaunchScreen" && this.props.games.currentUser) {
         return (
           <View style={styles.headerLoggedIn}>
@@ -55,6 +55,28 @@ class Header extends Component {
             </View>
             <View style={styles.titleView}>
               <Text style={styles.headerTitle}>Games</Text>
+            </View>
+            <View style={styles.logoutView}>
+              <TouchableOpacity onPress={() => this.props.logout()}>
+                <Text style={styles.headerTitle}>Logout</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        );
+      }
+
+
+      // Logged in, GameTab
+      if (routeName === "GameTabNoActiveGame" && this.props.games.currentUser) {
+        return (
+          <View style={styles.headerLoggedIn}>
+            <View style={styles.userView}>
+              <Text style={styles.headerUser}>
+                {this.props.games.currentUser.userName}
+              </Text>
+            </View>
+            <View style={styles.titleView}>
+              <Text style={styles.headerTitle}>Game</Text>
             </View>
             <View style={styles.logoutView}>
               <TouchableOpacity onPress={() => this.props.logout()}>

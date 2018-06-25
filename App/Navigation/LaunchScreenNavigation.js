@@ -9,7 +9,6 @@ const LaunchScreenNavigation = StackNavigator(
       screen: LaunchScreen
     },
   },
-
   {
     navigationOptions: ({ navigation, screenProps }) => ({
       header: <Header navigation={navigation} screenProps={screenProps} />,

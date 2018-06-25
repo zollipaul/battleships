@@ -3,7 +3,7 @@ import { Animated } from "react-native";
 
 // Styles
 import styles from "./Styles/CrosshairStyle";
-import Icon from "react-native-vector-icons/FontAwesome";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { Colors, Metrics } from "../Themes";
 
 class Crosshair extends Component {
@@ -25,15 +25,14 @@ class Crosshair extends Component {
         this.props.crosshairInitialPosition.locationY - Metrics.crosshair / 2,
       left:
         this.props.crosshairInitialPosition.locationX -
-        Metrics.crosshair / 2 +
-        10
+        Metrics.crosshair / 2
     };
 
     return this.props.showCrosshair ? (
       <AnimatedIcon
         {...this.props.panHandlers}
         style={[crosshairPanStyle, styles.crosshair, absolutePosition]}
-        name="crosshairs"
+        name="target"
         size={Metrics.crosshair}
         color={Colors.frost}
       />

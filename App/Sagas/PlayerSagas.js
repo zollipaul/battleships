@@ -13,6 +13,7 @@
 import { call, put } from "redux-saga/effects";
 import PlayersActions from "../Redux/PlayersRedux";
 import GamesActions from "../Redux/GamesRedux";
+import GameViewActions from '../Redux/GameViewRedux'
 
 // import { PlayersSelectors } from '../Redux/PlayersRedux'
 
@@ -65,6 +66,7 @@ export function* logoutPlayer(api, action) {
     // located in ../Transforms/. Otherwise, just pass the data back from the api.
     yield put(PlayersActions.logoutPlayerSuccess(response.data));
     yield put(GamesActions.getGamesRequest());
+    yield put(GameViewActions.resetGameView())
   } else {
     yield put(PlayersActions.logoutPlayerFailure());
   }

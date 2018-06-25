@@ -24,14 +24,14 @@ export const INITIAL_STATE = Immutable({
 /* ------------- Selectors ------------- */
 
 export const GamesSelectors = {
-  getData: state => state.data
+  getGames: state => state.games.payload
 }
 
 /* ------------- Reducers ------------- */
 
 // request the data from an api
 export const request = (state, { data }) =>
-  state.merge({ fetching: true, data, payload: null })
+  state.merge({ fetching: true, data })
 
 // successful api lookup
 export const success = (state, action) => {

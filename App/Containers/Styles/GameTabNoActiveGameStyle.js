@@ -1,26 +1,17 @@
 import { StyleSheet } from 'react-native'
-import { ApplicationStyles, Metrics, Colors } from '../../Themes'
+import { Colors, Metrics } from '../../Themes/'
 import Fonts from '../../Themes/Fonts'
 
 export default StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: Colors.background
   },
-  label: {
-    textAlign: 'center',
-    color: Colors.snow
-  },
-  sectionHeader: {
-    marginVertical: Metrics.doubleBaseMargin,
-  },
-  sectionHeaderText: {
+  text: {
     ...Fonts.style.h4,
     color: Colors.text,
     textAlign: 'center'
-  },
-  listContent: {
-    marginTop: Metrics.baseMargin
   }
 })
