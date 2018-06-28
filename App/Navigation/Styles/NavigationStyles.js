@@ -1,6 +1,9 @@
 import { StyleSheet } from 'react-native'
-import { ApplicationStyles } from '../../Themes'
+import { Colors, Metrics } from '../../Themes'
 
 export default StyleSheet.create({
-  ...ApplicationStyles.screen,
+  navBar: {
+    height: Metrics.navBarHeight,
+    backgroundColor: Colors.navBarBackground
+  },
 })

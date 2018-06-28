@@ -2,31 +2,24 @@ import React from "react";
 import { TabNavigator, TabBarBottom } from "react-navigation";
 import LaunchScreenNavigation from "./LaunchScreenNavigation";
 import GameScreenStack from "./GameScreenNavigation";
-import LeaderboardScreen from "../Containers/LeaderboardScreen";
+import LeaderboardStack from "./LeaderBoardNavigation";
 import Icon from "react-native-vector-icons/FontAwesome";
 import {store } from '../Containers/App'
 import ManageGameActions from '../Redux/ManageGameRedux'
+import styles from './Styles/NavigationStyles'
+import { Colors, } from '../Themes'
 
 // Manifest of possible screens
 const PrimaryNav = TabNavigator(
   {
     LaunchScreenStack: {
       screen: LaunchScreenNavigation,
-      navigationOptions: {
-        title: "All Games"
-      }
     },
     GameScreenStack: {
       screen: GameScreenStack,
-      navigationOptions: {
-        title: "Game"
-      }
     },
     LeaderboardScreen: {
-      screen: LeaderboardScreen,
-      navigationOptions: {
-        title: "Leaderboard"
-      }
+      screen: LeaderboardStack,
     }
   },
   {
@@ -55,8 +48,10 @@ const PrimaryNav = TabNavigator(
       }
     }),
     tabBarOptions: {
-      activeTintColor: "black",
-      inactiveTintColor: "gray"
+      activeTintColor: Colors.navBarIconActive,
+      inactiveTintColor: Colors.navBarIconInactive,
+      showLabel: false,
+      style: styles.navBar
     },
     tabBarComponent: TabBarBottom,
     tabBarPosition: "bottom",

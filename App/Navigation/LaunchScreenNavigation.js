@@ -1,7 +1,7 @@
 import React from "react";
 import { StackNavigator } from "react-navigation";
-import LaunchScreen from "../Containers/LaunchScreen";
-import Header from "../Containers/Header";
+import LaunchScreen from "../Features/GamesList/Containers/LaunchScreen";
+import Header from "../Features/Header/Header";
 
 const LaunchScreenNavigation = StackNavigator(
   {

@@ -1,11 +1,25 @@
 import Fonts from './Fonts'
 import Metrics from './Metrics'
 import Colors from './Colors'
+import { Platform } from 'react-native'
 
 // This file is for a reusable grouping of Theme items.
 // Similar to an XML fragment layout in Android
 
 const ApplicationStyles = {
+  shadow: {
+    ...Platform.select({
+      ios: {
+        shadowColor: Colors.shadowColor,
+        shadowOffset: {width: 0, height: 2},
+        shadowOpacity: 0.8,
+        shadowRadius: 2,
+      },
+      android: {
+        elevation: 5,
+      },
+    }),
+  },
   screen: {
     mainContainer: {
       flex: 1,

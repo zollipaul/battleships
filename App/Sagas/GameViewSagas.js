@@ -13,6 +13,7 @@ export function* getGameView(api, action) {
     let gameView = response.data;
     // transform
     gameView.gameGrids = ConvertGameViewData(gameView);
+    console.log(gameView);
     yield put(GameViewActions.gameViewSuccess(gameView));
   } else {
     yield put(GameViewActions.gameViewFailure());
@@ -25,17 +26,22 @@ export function* backgroundSync(api, gamePlayerId) {
     const response = yield call(api.getGameView, gamePlayerId);
     // success?
     if (response.ok) {
-      const prevStage = yield select(GameViewSelectors.getStage);
+      const prevGameView = yield select(GameViewSelectors.getGameView);
       let gameView = response.data;
-      // transform
-      gameView.gameGrids = ConvertGameViewData(response.data);
-      yield put(GameViewActions.gameViewSuccess(gameView));
-
-      if (
+      const prevStage = prevGameView.stage;
+      if (prevGameView.salvoes.length !== gameView.salvoes.length) {
+        console.log("update GameView");
+        gameView.gameGrids = ConvertGameViewData(response.data);
+        console.log(gameView);
+        yield put(GameViewActions.gameViewSuccess(gameView));
+      } else if (
         (prevStage === "waitingForJoiningOpponent" ||
           prevStage === "waitingForPlacingShipsOfOpponent") &&
         gameView.game.stage === "placingSalvoes"
       ) {
+        console.log("navigation Call background Sycn");
+        gameView.gameGrids = ConvertGameViewData(response.data);
+        yield put(GameViewActions.gameViewSuccess(gameView));
         yield call(navigation, gameView.stage);
       }
     } else {
@@ -49,7 +55,7 @@ export function* gameViewSyncManager(api) {
     const action = yield take("GAME_VIEW_SUCCESS");
     const stage = action.payload.stage;
     const gamePlayerId = action.payload.id;
-    if (stage !== "GameOver") {
+    if (stage !== "gameOver") {
       const task = yield fork(backgroundSync, api, gamePlayerId);
       yield take([
         "JOIN_GAME_SUCCESS",

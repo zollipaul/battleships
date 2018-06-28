@@ -11,11 +11,9 @@ YellowBox.ignoreWarnings([
   "Warning: componentWillMount is deprecated",
   "Warning: componentWillReceiveProps is deprecated",
   "Warning: componentWillUpdate is deprecated",
-  'Module RCTImageLoader requires',
-  'Module RNDeviceInfo requires',
-  'Warning: isMounted'
-
-
+  "Module RCTImageLoader requires",
+  "Module RNDeviceInfo requires",
+  "Warning: isMounted"
 ]);
 
 // create our store

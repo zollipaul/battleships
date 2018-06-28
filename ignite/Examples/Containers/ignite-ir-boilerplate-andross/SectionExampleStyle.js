@@ -17,7 +17,7 @@ export default StyleSheet.create({
   boldLabel: {
     fontWeight: 'bold',
     alignSelf: 'center',
-    color: Colors.snow,
+    color: Colors.white,
     textAlign: 'center',
     marginBottom: Metrics.smallMargin
   },

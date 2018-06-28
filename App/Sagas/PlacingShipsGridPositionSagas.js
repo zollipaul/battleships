@@ -16,7 +16,7 @@ import PlacingShipsGridPositionActions from "../Redux/PlacingShipsGridPositionRe
 import { StatusBar, Platform } from "react-native";
 
 export function* getPlacingShipsGridY() {
-  const STATUSBAR_HEIGHT = Platform.OS === "ios" ? 20 : StatusBar.currentHeight;
+  const STATUSBAR_HEIGHT = Platform.OS === "ios" ? 20 : 0;
 
   // height of MyStatusBar and header components
   const py = STATUSBAR_HEIGHT + 45;
