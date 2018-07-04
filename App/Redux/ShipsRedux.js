@@ -9,7 +9,7 @@ const { Types, Creators } = createActions({
 
   resetShip: ["id"],
 
-  resetAllShips: null
+  resetAllShips: null,
 });
 
 export const ShipsTypes = Types;

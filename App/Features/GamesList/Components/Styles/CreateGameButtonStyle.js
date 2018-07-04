@@ -1,4 +1,4 @@
-import { Platform, StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native'
 import { Colors } from '../../../../Themes'
 import ApplicationStyles from '../../../../Themes/ApplicationStyles'
 
@@ -22,5 +22,4 @@ export default StyleSheet.create({
     left: 13.51,
     // bottom: 10
   },
-
 })

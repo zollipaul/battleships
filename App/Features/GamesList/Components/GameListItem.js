@@ -1,36 +1,32 @@
 import React, { PureComponent } from "react";
 import styles from "./Styles/GameListItemStyle";
 import { Text, View, TouchableOpacity } from "react-native";
-import { Colors } from "../../../Themes";
-import FontAweSomeIcon from "react-native-vector-icons/FontAwesome";
-import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 
 class GameListItem extends PureComponent {
-  getStage = () => {
+  getDistance = () => {
+    const distance = this.props.distance;
+    let meterOrKilometer =
+      distance < 1000 ? distance + " m" : (distance / 1000).toFixed(1) + " km";
+
+    if (distance !== null) {
+      return <Text style={styles.stage}>{meterOrKilometer}</Text>;
+    }
+  };
+
+  getStage = (gameCanBeJoined, gameHasCurrentPlayer) => {
     const stage = this.props.stage;
-    if (stage === "placingShips") {
-      return <Text style={styles.stage}>Place ships</Text>
-
-      // return (
-      //   <View style={styles.placeShips}>
-      //     <MaterialCommunityIcon
-      //       style={styles.ship}
-      //       name={"grid-large"}
-      //       size={30}
-      //       color={Colors.white}
-      //     >
-      //
-      //     </MaterialCommunityIcon>
-      //     <MaterialCommunityIcon
-      //       style={styles.pointer}
-      //       name={"cursor-pointer"}
-      //       size={35}
-      //       color={Colors.highlight}
-      //     />
-      //   </View>)
-
+    if (
+      stage === "placingShips" &&
+      this.props.gamePlayers.length === 1 &&
+        (this.props.currentUser === null || gameHasCurrentPlayer)
+    ) {
+      return <Text style={styles.stage}>Waiting</Text>;
+    } else if (stage === "placingShips" && gameCanBeJoined) {
+      return this.getDistance();
+    } else if (stage === "placingShips") {
+      return <Text style={styles.stage}>Place ships</Text>;
     } else if (stage === "placingSalvoes") {
-      return <Text style={styles.stage}>Turn: {this.props.turn}</Text>;
+      return <Text style={styles.stage}>Turn {this.props.turn}</Text>;
     } else if (stage === "gameOver") {
       return <Text style={styles.stage}>Winner: {this.props.winner}</Text>;
     }
@@ -38,6 +34,7 @@ class GameListItem extends PureComponent {
 
   render() {
 
+    console.log(this.props.gamePlayers)
 
     const gamePlayer2 = this.props.gamePlayers[1] ? (
       <Text>{this.props.gamePlayers[1].player.userName} </Text>
@@ -55,16 +52,9 @@ class GameListItem extends PureComponent {
         }
       });
     }
-
     const gameHasCurrentPlayer = gamePlayerIdOfCurrentUser !== null;
     const gameCanBeJoined =
       this.props.gamePlayers.length === 1 && !gameHasCurrentPlayer;
-    //
-    // const specificStyle = gameHasCurrentPlayer
-    //   ? styles.canBeChanged
-    //   : gameCanBeJoined
-    //     ? styles.canBeJoined
-    //     : styles.cannotBeChangedOrJoined;
 
     return (
       <TouchableOpacity
@@ -77,7 +67,7 @@ class GameListItem extends PureComponent {
             this.props.joinGame(this.props.id);
           }
         }}
-        disabled={!gameHasCurrentPlayer && !gameCanBeJoined}
+        disabled={currentUser === null}
       >
         <View style={styles.col}>
           <Text style={styles.players}>
@@ -85,7 +75,7 @@ class GameListItem extends PureComponent {
           </Text>
           <Text style={styles.time}>{this.props.created}</Text>
         </View>
-        {this.getStage()}
+        {this.getStage(gameCanBeJoined, gameHasCurrentPlayer)}
       </TouchableOpacity>
     );
   }

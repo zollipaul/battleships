@@ -23,14 +23,14 @@ class Header extends Component {
 
     return (
       <Text style={styles.titleText}>
-        {gamePlayers[0].player.userName} vs. {gamePlayer2}
+        {gamePlayers[0].player.userName} vs {gamePlayer2}
       </Text>
     );
   };
 
   render() {
     const routeName = this.props.navigation.state.routeName.valueOf();
-    console.log(routeName)
+    // console.log(routeName)
 
     if (this.props.games !== null) {
       // Logged out
@@ -69,7 +69,7 @@ class Header extends Component {
       }
 
       // Logged in, GameTab
-      if (routeName === "GameTabNoActiveGame" && this.props.games.currentUser) {
+      if (routeName === "Loading" && this.props.games.currentUser) {
         return (
           <View style={styles.headerLoggedIn}>
             <View style={styles.userView}>

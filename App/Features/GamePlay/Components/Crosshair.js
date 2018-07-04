@@ -33,7 +33,7 @@ class Crosshair extends Component {
         style={[crosshairPanStyle, styles.crosshair, absolutePosition]}
         name="target"
         size={Metrics.crosshair}
-        color={Colors.frost}
+        color={Colors.white}
       />
     );
   }

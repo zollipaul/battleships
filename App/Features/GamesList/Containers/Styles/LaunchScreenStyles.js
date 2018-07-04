@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native'
-import { ApplicationStyles, Metrics, Colors } from '../../../../Themes/index'
+import { Metrics, Colors } from '../../../../Themes/index'
 import { human } from 'react-native-typography'
+import ApplicationStyles from '../../../../Themes/ApplicationStyles'
 
 export default StyleSheet.create({
   container: {
@@ -12,6 +13,8 @@ export default StyleSheet.create({
     color: Colors.white
   },
   sectionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
     marginLeft: Metrics.doubleBaseMargin,
     paddingVertical: Metrics.baseMargin,
     backgroundColor: Colors.background
@@ -19,5 +22,5 @@ export default StyleSheet.create({
   sectionHeaderText: {
     ...human.headlineObject,
     color: Colors.white,
-  },
+  }
 })

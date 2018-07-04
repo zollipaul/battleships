@@ -1,5 +1,5 @@
 {
-  "name": "salvoReact",
+  "name": "battleships",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -40,6 +40,7 @@
     "react-native-device-info": "0.11.0",
     "react-native-fast-image": "^4.0.14",
     "react-native-haptic-feedback": "^1.1.7",
+    "react-native-permissions": "^1.1.1",
     "react-native-spinkit": "^1.1.1",
     "react-native-typography": "^1.3.0",
     "react-native-vector-icons": "4.3.0",

@@ -3,9 +3,11 @@ import { StackNavigator } from "react-navigation";
 import PlacingShipsScreen from "../Features/PlacingShips/Containers/PlacingShipsScreen";
 import GamePlayScreen from "../Features/GamePlay/Containers/GamePlayScreen";
 import Header from "../Features/Header/Header";
-import WaitingForOpponentScreen from "../Features/PlacingShips/Containers/WaitingForOpponentScreen";
-import GameTabLoggedOut from "../Features/GameTabs/GameTabLoggedOut";
-import GameTabNoActiveGame from "../Features/GameTabs/GameTabNoActiveGame";
+import WaitingForOpponentScreen from "../Features/Waiting/Containers/WaitingForOpponentScreen";
+import GameTabLoggedOut from "../Features/Waiting/Components/GameTabLoggedOut";
+import Loading from "../Features/Waiting/Components/Loading";
+
+import GameTabNoActiveGame from "../Features/Waiting/Components/GameTabNoActiveGame";
 import { Animated, Easing } from "react-native";
 
 const GameScreenStack = StackNavigator(
@@ -24,6 +26,9 @@ const GameScreenStack = StackNavigator(
     },
     GameTabNoActiveGame: {
       screen: GameTabNoActiveGame
+    },
+    Loading: {
+      screen: Loading
     }
   },
   {

@@ -29,27 +29,28 @@ export default class GamePlayHeading extends Component<Props> {
 
     if (this.props.stage === "myTurnAndOpponentHasShot") {
       return (
-        <View>
+        <View style={styles.stageContainer}>
           <Text style={styles.stage}>{this.salvoText()}</Text>
-          <Text style={styles.hurry}>
-            Hurry up, {this.props.opponent} is waiting for you!
-          </Text>
+          <View style={styles.hurryView}><Text style={styles.hurryText}>Hurry up,</Text>
+            <Text style={styles.hurryText}>
+              {this.props.opponent} is waiting for you!
+            </Text></View>
         </View>
       );
     }
 
     if (this.props.stage === "waitingForSalvoOfOpponent") {
       return (
-        <View>
+        <View style={styles.stageContainer}>
           <Text style={styles.stage}>Waiting on opponent</Text>
-          <ActivityIndicator size="large" color={Colors.frost} />
+          <ActivityIndicator size="large" color={Colors.grid} style={styles.activityIndicator}/>
         </View>
       );
     }
 
     if (this.props.stage === "gameOver") {
       return (
-        <View>
+        <View style={styles.stageContainer}>
           <Text style={styles.stage}>Game Over</Text>
           <Text style={styles.stage}>Winner is: {this.props.winner}</Text>
         </View>

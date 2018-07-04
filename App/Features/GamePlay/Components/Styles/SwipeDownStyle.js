@@ -1,22 +1,25 @@
 import { StyleSheet } from 'react-native'
-import { Colors } from '../../../../Themes/index'
-import Fonts from '../../../../Themes/Fonts'
+import { Colors, Metrics} from '../../../../Themes/index'
+import { human } from "react-native-typography";
 
 export default StyleSheet.create({
   arrow: {
     position: 'absolute',
     left: 0,
     right: 0,
-    top: 0,
+    top: 5,
     bottom: 0,
   },
   container: {
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   swipeDown: {
-    ...Fonts.style.h2,
-    color: Colors.text,
+    ...human.title1Object,
+    color: Colors.white,
+  },
+  icon: {
+    marginLeft: Metrics.baseMargin
   }
 })

@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import { View, Text, FlatList } from "react-native";
 import { connect } from "react-redux";
-// Add Actions - replace 'Your' with whatever your reducer is called :)
-// import YourActions from '../Redux/YourRedux'
+import Loading from "../Waiting/Components/Loading";
 
 // Styles
 import styles from "./Styles/LeaderboardScreenStyle";
@@ -38,9 +37,12 @@ class LeaderboardScreen extends Component {
   * e.g.
     return <MyCustomCell title={item.title} description={item.description} />
   *************************************************************/
-  renderRow({ item }) {
+  renderRow = ({ item, index }) => {
+
+    const lastRow = (this.props.leaderboard.payload.length - 1) === index ? styles.lastRow : null
+
     return (
-      <View style={styles.row}>
+      <View style={[styles.row, lastRow]}>
         <View style={styles.name}>
           <Text style={styles.textName}>{item.userName}</Text>
         </View>
@@ -67,21 +69,21 @@ class LeaderboardScreen extends Component {
    *************************************************************/
   // Render a header?
   renderHeader = () => (
-    <View style={styles.row}>
+    <View style={[styles.row, styles.headerRow]}>
       <View style={styles.name}>
-        <Text style={[styles.textName, styles.header]}>Name</Text>
+        <Text style={styles.headerText}>Name</Text>
       </View>
       <View style={styles.stats}>
-        <Text style={[styles.textStats, styles.header]}>Total</Text>
+        <Text style={styles.headerText}>Total</Text>
       </View>
       <View style={styles.stats}>
-        <Text style={[styles.textStats, styles.header]}>Win</Text>
+        <Text style={styles.headerText}>Win</Text>
       </View>
       <View style={styles.stats}>
-        <Text style={[styles.textStats, styles.header]}>Lost</Text>
+        <Text style={styles.headerText}>Lost</Text>
       </View>
       <View style={styles.stats}>
-        <Text style={[styles.textStats, styles.header]}>Tied</Text>
+        <Text style={styles.headerText}>Tied</Text>
       </View>
     </View>
   );
@@ -121,7 +123,7 @@ class LeaderboardScreen extends Component {
   // )}
 
   render() {
-    return (
+    return this.props.leaderboard.payload !== null ? (
       <View style={styles.container}>
         <FlatList
           contentContainerStyle={styles.listContent}
@@ -132,9 +134,10 @@ class LeaderboardScreen extends Component {
           ListHeaderComponent={this.renderHeader}
           ListFooterComponent={this.renderFooter}
           ListEmptyComponent={this.renderEmpty}
-          // ItemSeparatorComponent={this.renderSeparator}
-        />
+       />
       </View>
+    ) : (
+      <Loading />
     );
   }
 }

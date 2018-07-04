@@ -25,45 +25,33 @@ export default class ShipsContainer extends Component {
   render() {
     return (
       <View style={styles.container}>
-        {/*<View style={styles.rows}>*/}
-
-          <View style={styles.rows}>
-
-
-            <Ship
-              ship={Ships["2"]}
-              disableRotationTip={this.disableRotationTip}
-            />
-
-            <Ship
-              ship={Ships["5"]}
-              disableRotationTip={this.disableRotationTip}
-            />
-
-
-
-          </View>
-          <View style={styles.aircraftCarrierContainer}>
-            <View style={styles.rotationTip}>{this.renderRotationTip()}</View>
-            <Ship
-              ship={Ships["1"]}
-              disableRotationTip={this.disableRotationTip}
-            />
-          </View>
-          <View style={styles.rows}>
-            <Ship
-              ship={Ships["3"]}
-              disableRotationTip={this.disableRotationTip}
-            />
-
-            <Ship
-              ship={Ships["4"]}
-              disableRotationTip={this.disableRotationTip}
-            />
-
-
-          </View>
-        {/*</View>*/}
+        <View style={styles.rows}>
+          <Ship
+            ship={Ships["2"]}
+            disableRotationTip={this.disableRotationTip}
+          />
+          <Ship
+            ship={Ships["5"]}
+            disableRotationTip={this.disableRotationTip}
+          />
+        </View>
+        <View style={styles.aircraftCarrierContainer}>
+          <View style={styles.rotationTip}>{this.renderRotationTip()}</View>
+          <Ship
+            ship={Ships["1"]}
+            disableRotationTip={this.disableRotationTip}
+          />
+        </View>
+        <View style={styles.rows}>
+          <Ship
+            ship={Ships["3"]}
+            disableRotationTip={this.disableRotationTip}
+          />
+          <Ship
+            ship={Ships["4"]}
+            disableRotationTip={this.disableRotationTip}
+          />
+        </View>
       </View>
     );
   }

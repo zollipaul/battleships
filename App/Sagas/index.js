@@ -8,9 +8,11 @@ import DebugConfig from "../Config/DebugConfig";
 import { StartupTypes } from "../Redux/StartupRedux";
 import { PlayersTypes } from "../Redux/PlayersRedux";
 import { GamesTypes } from "../Redux/GamesRedux";
+import { GeolocationTypes } from "../Redux/GeolocationRedux";
+
 import { GameViewTypes } from "../Redux/GameViewRedux";
 import { LeaderboardTypes } from "../Redux/LeaderboardRedux";
-import { ManageGameTypes } from '../Redux/ManageGameRedux'
+import { ManageGameTypes } from "../Redux/ManageGameRedux";
 
 /* ------------- Sagas ------------- */
 
@@ -25,6 +27,8 @@ import {
 import { getGames, backgroundSyncGames } from "./GamesSagas";
 import { getGameView, gameViewSyncManager } from "./GameViewSagas";
 import { getLeaderboard } from "./LeaderboardSagas";
+import { postGeolocation } from "./GeolocationSagas";
+
 import {
   createGame,
   changeGame,
@@ -33,7 +37,6 @@ import {
   postSalvoes,
   clickOnGameInTabBar
 } from "./ManageGameSagas";
-import { getPlacingShipsGridY } from "./PlacingShipsGridPositionSagas";
 
 /* ------------- API ------------- */
 
@@ -52,6 +55,8 @@ export default function* root() {
     // some sagas receive extra parameters in addition to an action
     // takeLatest(GithubTypes.USER_REQUEST, getUserAvatar, api),
     takeLatest(GamesTypes.GET_GAMES_REQUEST, getGames, api),
+    takeLatest(GeolocationTypes.POST_GEOLOCATION_REQUEST, postGeolocation, api),
+
     takeLatest(PlayersTypes.GET_PLAYERS_REQUEST, getPlayers, api),
     takeLatest(PlayersTypes.LOGIN_PLAYER_REQUEST, loginPlayer, api),
     takeLatest(PlayersTypes.LOGOUT_PLAYER_REQUEST, logoutPlayer, api),
@@ -71,12 +76,13 @@ export default function* root() {
     takeLatest(ManageGameTypes.POST_SALVOES_REQUEST, postSalvoes, api),
 
     takeLatest(
-      [ManageGameTypes.JOIN_GAME_SUCCESS, ManageGameTypes.CHANGE_GAME, ManageGameTypes.CREATE_GAME_SUCCESS],
+      [
+        ManageGameTypes.JOIN_GAME_SUCCESS,
+        ManageGameTypes.CHANGE_GAME,
+        ManageGameTypes.CREATE_GAME_SUCCESS
+      ],
       gameViewSyncManager,
       api
     )
-
-
-
   ]);
 }

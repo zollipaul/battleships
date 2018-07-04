@@ -1,7 +1,7 @@
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import ManageGameActions from "../../../Redux/ManageGameRedux";
-import { Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import styles from "./Styles/PlayButtonStyle";
 
 class PlayButton extends PureComponent {
@@ -12,14 +12,15 @@ class PlayButton extends PureComponent {
 
   render() {
     const active = this.props.shipsCounter === 5;
-
     return active ? (
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => this.props.startGame()}
-      >
-        <Text style={styles.buttonText}>Play now</Text>
-      </TouchableOpacity>
+      <View style={styles.container}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => this.props.startGame()}
+        >
+          <Text style={styles.buttonText}>Play now!</Text>
+        </TouchableOpacity>
+      </View>
     ) : null;
   }
 }

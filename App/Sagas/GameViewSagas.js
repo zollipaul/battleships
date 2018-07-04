@@ -13,7 +13,6 @@ export function* getGameView(api, action) {
     let gameView = response.data;
     // transform
     gameView.gameGrids = ConvertGameViewData(gameView);
-    console.log(gameView);
     yield put(GameViewActions.gameViewSuccess(gameView));
   } else {
     yield put(GameViewActions.gameViewFailure());
@@ -25,12 +24,14 @@ export function* backgroundSync(api, gamePlayerId) {
     yield call(delay, 5000);
     const response = yield call(api.getGameView, gamePlayerId);
     // success?
+
+    console.log(response)
     if (response.ok) {
       const prevGameView = yield select(GameViewSelectors.getGameView);
       let gameView = response.data;
       const prevStage = prevGameView.stage;
       if (prevGameView.salvoes.length !== gameView.salvoes.length) {
-        console.log("update GameView");
+        // console.log("update GameView");
         gameView.gameGrids = ConvertGameViewData(response.data);
         console.log(gameView);
         yield put(GameViewActions.gameViewSuccess(gameView));

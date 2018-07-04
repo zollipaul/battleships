@@ -8,6 +8,7 @@ export default data => {
         id: row + col,
         title: getTitle(row, col),
         isShip: false,
+        isShipId: null,
         isMissed: false,
         horizontal: null,
         part: null,
@@ -53,6 +54,7 @@ export default data => {
       ship.locations[0].charAt(0) === ship.locations[1].charAt(0);
     ship.locations.forEach((location, i) => {
       gameGridsOfPlayerAndOpponent[opponentId][location].isShip = true;
+      gameGridsOfPlayerAndOpponent[opponentId][location].isShipId = ship.id;
       gameGridsOfPlayerAndOpponent[opponentId][
         location
       ].horizontal = horizontal;

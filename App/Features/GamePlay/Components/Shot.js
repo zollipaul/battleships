@@ -14,6 +14,7 @@ export default class Shot extends PureComponent {
 
   componentDidMount() {
     const id = this.props.id;
+    console.log(id)
     Animated.timing(this.state.shootVal, {
       toValue: 0,
       duration: 500,
@@ -21,7 +22,7 @@ export default class Shot extends PureComponent {
       useNativeDriver: true,
       delay: id * 100
     }).start(() => {
-      this.props.resetShoot();
+      this.props.endShot();
       if (id === 4) {
         this.props.resetAllSalvoes();
       }
@@ -64,6 +65,7 @@ export default class Shot extends PureComponent {
           shootTransform,
           shootOpacity
         ]}
+        size={this.props.length * 1.7}
       />
     );
   }

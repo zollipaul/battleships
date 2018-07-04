@@ -14,13 +14,14 @@ import { call, put } from "redux-saga/effects";
 import GamesActions from "../Redux/GamesRedux";
 import ConvertLocalDates from "../Transforms/ConvertLocalDates";
 import { delay } from "redux-saga";
+import { updateGeoLocation } from './GeolocationSagas'
 
 export function* getGames(api) {
+
   const response = yield call(api.getGames);
   // success?
   if (response.ok) {
     ConvertLocalDates(response.data.games);
-
     yield put(GamesActions.getGamesSuccess(response.data));
   } else {
     yield put(GamesActions.getGamesFailure());
@@ -30,8 +31,9 @@ export function* getGames(api) {
 export function* backgroundSyncGames(api) {
   // bg sync every 15 seconds
   while (true) {
-    yield call(delay, 15000);
+    yield call(delay, 20000);
     // console.log('gamesSync')
+    yield call(updateGeoLocation);
     const response = yield call(api.getGames);
     // success?
     if (response.ok) {
@@ -42,3 +44,6 @@ export function* backgroundSyncGames(api) {
     }
   }
 }
+
+
+

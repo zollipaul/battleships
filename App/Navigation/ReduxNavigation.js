@@ -12,7 +12,7 @@ class ReduxNavigation extends React.Component {
       const { dispatch, nav } = this.props;
       // change to whatever is your first screen, otherwise unpredictable results may occur
       if (
-        nav.routes.placingShipsSquareLength === 1 &&
+        nav.routes.length === 1 &&
         nav.routes[0].routeName === "LaunchScreenStack"
       ) {
         return false;

@@ -1,22 +1,36 @@
 import { StyleSheet } from 'react-native'
-import { ApplicationStyles, Metrics, Colors } from '../../../Themes/index'
+import { Metrics, Colors } from '../../../Themes/index'
+import { human } from 'react-native-typography'
+import ApplicationStyles from '../../../Themes/ApplicationStyles'
 
 export default StyleSheet.create({
-  ...ApplicationStyles.screen,
   container: {
     flex: 1,
     backgroundColor: Colors.background
   },
-  header: {
-    fontWeight: 'bold',
+  headerText: {
+    ...human.headlineObject,
+    color: Colors.white,
+    alignSelf: 'center',
+    textAlign: 'center',
+    marginBottom: Metrics.smallMargin
   },
   row: {
     flex: 1,
     flexDirection: 'row',
-    backgroundColor: Colors.fire,
+    paddingHorizontal: Metrics.baseMargin,
+    paddingVertical: Metrics.smallMargin,
+    backgroundColor: Colors.listItemBackground,
     borderBottomWidth: Metrics.bottomBorderTable,
-    // marginVertical: Metrics.smallMargin,
     // justifyContent: 'center'
+  },
+  lastRow: {
+    borderBottomLeftRadius: 5,
+    borderBottomRightRadius: 5
+  },
+  headerRow: {
+    borderTopLeftRadius: 5,
+    borderTopRightRadius: 5
   },
   name: {
     flex: 4,
@@ -25,11 +39,12 @@ export default StyleSheet.create({
     flex: 1.5,
   },
   textName: {
-    // alignSelf: 'center',
+    ...human.bodyObject,
     color: Colors.white,
     marginBottom: Metrics.smallMargin
   },
   textStats: {
+    ...human.bodyObject,
     alignSelf: 'center',
     color: Colors.white,
     textAlign: 'center',
@@ -40,6 +55,8 @@ export default StyleSheet.create({
     color: Colors.white
   },
   listContent: {
-    marginTop: Metrics.baseMargin
+    marginTop: Metrics.baseMargin,
+    marginHorizontal: Metrics.doubleBaseMargin,
+    ...ApplicationStyles.shadow,
   }
 })

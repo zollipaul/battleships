@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { View, PanResponder, Animated } from "react-native";
-import OpponentGrid from "../Components/OpponentGrid";
+import OpponentGrid from "./OpponentGrid";
 import styles from "./Styles/GamePlayOpponentGridStyle";
 import { connect } from "react-redux";
 import SalvoActions from "../../../Redux/SalvoRedux";
@@ -53,14 +53,6 @@ class GamePlayOpponentGrid extends Component {
         }
       ).start();
     }
-
-    // else if (
-    //   prevProps.turn !== this.props.turn ||
-    //   (prevProps.stage === "myTurnAndOpponentHasNotShot" &&
-    //     this.props.stage === "waitingForSalvoOfOpponent")
-    // ) {
-    //   this.setState({ shootNow: true });
-    // }
   }
 
   componentWillMount() {
@@ -91,10 +83,10 @@ class GamePlayOpponentGrid extends Component {
       onPanResponderMove: (e, gestureState) => {
         // console.log('dx, dy' + gestureState.dx, gestureState.dy)
 
-        console.log(
-          "touch rel. element: " + e.nativeEvent.locationX,
-          e.nativeEvent.locationY
-        );
+        // console.log(
+        //   "touch rel. element: " + e.nativeEvent.locationX,
+        //   e.nativeEvent.locationY
+        // );
         if (!this.props.fiveShotsReached) {
           if (this.isOutsideGrid(e)) {
             this.resetCrosshair();
@@ -108,11 +100,6 @@ class GamePlayOpponentGrid extends Component {
               dy: this.state.crosshairPan.y
             }
           ])(e, gestureState);
-
-          // this.state.crosshairPan.setValue({
-          //   x: gestureState.dx,
-          //   y: gestureState.dy
-          // });
         } else {
           if (gestureState.dy > 0) {
             this.state.gridPan.setValue(gestureState.dy);
@@ -132,8 +119,6 @@ class GamePlayOpponentGrid extends Component {
       },
       onPanResponderRelease: (e, gestureState) => {
         if (this.state.showCrosshair) {
-          console.log(this.getId(e));
-
           this.resetCrosshair();
           this.toggleSalvo(this.getId(e));
         } else {
@@ -228,12 +213,11 @@ class GamePlayOpponentGrid extends Component {
           style={[gridPanStyle, styles.opponentGrid]}
         >
           <OpponentGrid
-            stage={this.props.stage}
+           /* stage={this.props.stage}
             grid={this.props.grid}
             oldSalvoes={this.props.oldSalvoes}
             newSalvo={this.props.newSalvo}
-            resetShoot={this.resetShoot}
-            gamePlayerId={this.props.gamePlayerId}
+            gamePlayerId={this.props.gamePlayerId}*/
           />
           {this.renderCrosshair()}
         </Animated.View>
@@ -244,13 +228,12 @@ class GamePlayOpponentGrid extends Component {
 
 const mapStateToProps = state => {
   return {
-    grid: state.gameView.payload.gameGrids[state.gameView.payload.opponentId],
     newSalvo: state.salvoes,
     oldSalvoes: state.gameView.payload.salvoes,
     stage: state.gameView.payload.stage,
     gamePlayerId: state.gameView.payload.id,
     turn: state.gameView.payload.turn,
-    fiveShotsReached: state.salvoes.length === 5
+    fiveShotsReached: state.salvoes.length === 5,
   };
 };
 
@@ -267,7 +250,7 @@ const mapDispatchToProps = dispatch => {
     },
     stopBackgroundSync: () => {
       dispatch(GameViewActions.stopBackgroundSync());
-    }
+    },
   };
 };
 

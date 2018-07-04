@@ -10,7 +10,7 @@
  *    you'll need to define a constant in that file.
  *************************************************************/
 
-import { call, put, select, take } from "redux-saga/effects";
+import { call, put, select, take, all } from "redux-saga/effects";
 import ManageGameActions from "../Redux/ManageGameRedux";
 import GamesActions from "../Redux/GamesRedux";
 import { GameViewSelectors } from "../Redux/GameViewRedux";
@@ -23,18 +23,27 @@ import ShipsToArray from "../Transforms/ShipsToArray";
 import SalvoesToObject from "../Transforms/SalvoesToObject";
 
 import { ManageGameReduxSelectors } from "../Redux/ManageGameRedux";
+import { Alert } from "react-native";
 
 export function* createGame(api, action) {
   const { data } = action;
   // get current data from Store
   // const currentData = yield select(GamesSelectors.getData)
   // make the call to the api
+
   const response = yield call(api.createGame, data);
+  console.log(response);
+
   // success?
   if (response.ok) {
     yield put(ManageGameActions.createGameSuccess(response.data));
     yield call(controller, response.data.gamePlayerId);
   } else {
+    if (response.data.error === "fiveGamesReached") {
+      Alert.alert(
+        "You have more than five active games, so you can't join or create new games."
+      );
+    }
     yield put(ManageGameActions.createGameFailure());
   }
 }
@@ -52,12 +61,16 @@ export function* joinGame(api, action) {
     yield put(ManageGameActions.joinGameSuccess(response.data));
     yield call(controller, response.data.gamePlayerId);
   } else {
+    if (response.data.error === "fiveGamesReached") {
+      Alert.alert(
+        "You have more than five active games, so you can't join or create new games."
+      );
+    }
     yield put(ManageGameActions.joinGameFailure());
   }
 }
 
-export function* startGame(api, action) {
-  const { data } = action;
+export function* startGame(api) {
   const ships = yield select(ManageGameReduxSelectors.getShips);
   const gamePlayerId = yield select(GameViewSelectors.getGamePlayerId);
   const shipsArray = ShipsToArray(ships);
@@ -75,7 +88,10 @@ export function* startGame(api, action) {
 export function* clickOnGameInTabBar() {
   const gameView = yield select(GameViewSelectors.getGameView);
   const games = yield select(GamesSelectors.getGames);
-  if (games.currentUser === null ) {
+
+  if (games === null) {
+    yield put(NavigationActions.navigate({ routeName: "Loading" }));
+  } else if (games.currentUser === null) {
     yield put(NavigationActions.navigate({ routeName: "GameTabLoggedOut" }));
   } else if (gameView === null) {
     yield put(NavigationActions.navigate({ routeName: "GameTabNoActiveGame" }));
@@ -94,7 +110,6 @@ export function* postSalvoes(api) {
   const response = yield call(api.postSalvoes, gamePlayerId, salvoObject);
   if (response.ok) {
     yield put(ManageGameActions.postSalvoesSuccess(response.data));
-    // yield call(controller, gamePlayerId);
     yield put(GameViewActions.gameViewRequest(gamePlayerId));
   } else {
     yield put(ManageGameActions.postSalvoesFailure());
@@ -102,18 +117,21 @@ export function* postSalvoes(api) {
 }
 
 function* controller(gamePlayerId) {
-  yield put(GamesActions.getGamesRequest());
-  yield put(GameViewActions.gameViewRequest(gamePlayerId));
+  yield put(NavigationActions.navigate({ routeName: "Loading" }));
+
+  yield all([
+    yield put(GameViewActions.gameViewRequest(gamePlayerId)),
+    yield put(GamesActions.getGamesRequest())
+  ]);
   const gameView = yield take("GAME_VIEW_SUCCESS");
   yield call(navigation, gameView.payload.stage);
 }
 
 export function* navigation(stage) {
   if (stage === "placingShips") {
-    // first reset ships
     yield put(NavigationActions.navigate({ routeName: "PlacingShipsScreen" }));
     yield put(ShipsActions.resetAllShips());
-    yield put(SalvoActions.resetAllSalvoes());
+    // yield put(SalvoActions.resetAllSalvoes());
   } else if (
     stage === "waitingForJoiningOpponent" ||
     stage === "waitingForPlacingShipsOfOpponent"

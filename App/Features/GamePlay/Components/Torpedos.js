@@ -27,7 +27,7 @@ export default class Torpedos extends PureComponent {
       ]
     };
 
-    console.log("renderTorpedos");
+    // console.log("renderTorpedos");
 
     return (
       <Animated.View

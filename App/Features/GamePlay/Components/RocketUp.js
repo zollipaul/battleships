@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { Colors, Metrics } from "../../../Themes/index";
+import { Colors, } from "../../../Themes/index";
 
 export default class RocketUp extends Component {
   render() {
@@ -9,7 +9,7 @@ export default class RocketUp extends Component {
     };
 
     return (
-      <Icon name={"rocket"} size={50} color={Colors.frost} style={rotate135} />
+      <Icon name={"rocket"} size={50} color={Colors.white} style={rotate135} />
     );
   }
 }

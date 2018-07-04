@@ -22,13 +22,6 @@ export default StyleSheet.create({
     ...human.bodyObject,
     color: Colors.white,
   },
-  // logoutButton: {
-  //   backgroundColor: Colors.charcoal,
-  //   padding: 8,
-  //   borderRadius: 10,
-  //   justifyContent: 'center',
-  //   alignItems: 'center'
-  // },
   headerUser:{
     ...human.bodyObject,
     color: Colors.white,

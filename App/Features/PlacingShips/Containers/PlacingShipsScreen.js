@@ -26,8 +26,10 @@ class PlacingShipsScreen extends PureComponent {
           gameView={this.props.gameView}
           measureLayout={this.measureLayout}
         />
-        <ShipsContainer />
-        <PlayButton />
+        <View style={styles.container}>
+          <ShipsContainer />
+          <PlayButton />
+        </View>
       </View>
     ) : (
       <Text>Loading...</Text>

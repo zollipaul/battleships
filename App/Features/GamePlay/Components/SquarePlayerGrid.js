@@ -8,7 +8,7 @@ import { Colors } from "../../../Themes/index";
 
 class SquarePlayerGrid extends PureComponent {
   colorSalvo = () => {
-    return this.props.isShip ? Colors.bloodOrange : Colors.frost;
+    return this.props.isShip ? Colors.highlight : Colors.white;
   };
 
   renderContent = () => {

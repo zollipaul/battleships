@@ -1,21 +1,32 @@
 import React, { PureComponent } from "react";
-import { Text, View } from "react-native";
-// Styles
-import styles from "./Styles/SquareOpponentGrid";
+import { Animated, Text } from "react-native";
 import Salvo from "./Salvo";
 import Dot from "./Dot";
 import Shot from "./Shot";
+import styles from "./Styles/SquareOpponentGridStyle";
+import { Colors, Metrics } from "../../../Themes/index";
 
-import { Colors } from "../../../Themes/index";
+const length = Metrics.gamePlayOpponentSquareLength;
 
 class SquareOpponentGrid extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      shootNow: false
+      shootNow: false,
+      scale: new Animated.Value(1),
+      salvo: props.salvo,
+      hit: props.hit,
+      isShip: props.isShip,
+      showDot: true
     };
   }
+
   componentDidUpdate(prevProps, prevState) {
+    if (this.props.id === "A3") {
+      console.log(prevProps);
+      console.log(this.props);
+    }
+
     if (
       !prevProps.salvo &&
       this.props.salvo &&
@@ -23,11 +34,13 @@ class SquareOpponentGrid extends PureComponent {
       !this.state.shootNow
     ) {
       this.setState({ shootNow: true });
+    } else if (this.props.startShipAnimation && !prevProps.startShipAnimation) {
+      this.shipAnimation();
     }
   }
 
   colorSalvo = () => {
-    return this.props.isShip ? Colors.bloodOrange : Colors.frost;
+    return this.state.isShip ? Colors.highlight : Colors.white;
   };
 
   renderContent = () => {
@@ -37,20 +50,70 @@ class SquareOpponentGrid extends PureComponent {
     }
 
     // oldSalvo
-    else if (this.props.salvo) {
-      return <Salvo length={this.props.length} color={this.colorSalvo()} />;
+    else if (this.state.salvo) {
+      return <Salvo length={length} color={this.colorSalvo()} />;
     }
 
     // newSalvo
-    else if (this.props.newSalvo) {
-      return <Dot length={this.props.length} color={this.colorSalvo()} />;
+    else if (this.props.newSalvo && this.state.showDot) {
+      return <Dot length={length} />;
     }
   };
 
-  resetShoot = () => {
+  hitAnimation = () => {
+    this.setState({
+      salvo: true,
+      hit: true
+    });
+    Animated.sequence([
+      Animated.timing(this.state.scale, {
+        toValue: 2,
+        duration: 500,
+        useNativeDriver: true
+      }),
+      Animated.timing(this.state.scale, {
+        toValue: 1,
+        duration: 500,
+        useNativeDriver: true
+      })
+    ]).start(() => {});
+  };
+
+  shipAnimation = () => {
+    this.setState({
+      isShip: true,
+      showDot: false,
+      salvo: false
+    });
+
+    Animated.sequence([
+      Animated.timing(this.state.scale, {
+        toValue: 3,
+        duration: 500,
+        useNativeDriver: true
+      }),
+      Animated.timing(this.state.scale, {
+        toValue: 1,
+        duration: 500,
+        useNativeDriver: true
+      })
+    ]).start(() => {
+      this.setState({ salvo: true, showDot: true });
+    });
+  };
+
+  endShot = () => {
     this.setState({
       shootNow: false
     });
+
+    if (this.props.hit) {
+      this.hitAnimation();
+    } else if (this.props.isShip) {
+      this.props.shipAnimation(this.props.isShipId);
+    } else if (this.props.salvo) {
+      this.setState({ salvo: true });
+    }
   };
 
   shoot() {
@@ -58,10 +121,11 @@ class SquareOpponentGrid extends PureComponent {
       return (
         <Shot
           shotPosition={{
-            locationX: this.props.length / 2,
-            locationY: this.props.length / 2
+            locationX: length / 2,
+            locationY: length / 2
           }}
-          resetShoot={this.resetShoot}
+          length={length}
+          endShot={this.endShot}
           id={this.props.newSalvoId}
           resetAllSalvoes={this.props.resetAllSalvoes}
         />
@@ -70,10 +134,15 @@ class SquareOpponentGrid extends PureComponent {
   }
 
   render() {
-    // console.log("renderSquare");
+    console.log("renderSquare");
 
     let backgroundStyle, borderStyle;
-    if (this.props.isShip) {
+
+    const scale = {
+      transform: [{ scale: this.state.scale }]
+    };
+
+    if (this.state.isShip) {
       backgroundStyle = styles.shipBackground;
       borderStyle =
         styles[
@@ -91,7 +160,7 @@ class SquareOpponentGrid extends PureComponent {
             "AndPart" +
             this.props.part
         ];
-    } else if (this.props.hit) {
+    } else if (this.state.hit) {
       backgroundStyle = styles.hitBackground;
       borderStyle = styles.standardBorder;
     } else if (this.props.newSalvo) {
@@ -102,18 +171,19 @@ class SquareOpponentGrid extends PureComponent {
     }
 
     return (
-      <View
+      <Animated.View
         style={[
           styles.basic,
           backgroundStyle,
-          { width: this.props.length, height: this.props.length },
-          borderStyle
+          { width: length, height: length },
+          borderStyle,
+          scale
         ]}
         pointerEvents="none"
       >
         {this.renderContent()}
         {this.shoot()}
-      </View>
+      </Animated.View>
     );
   }
 }

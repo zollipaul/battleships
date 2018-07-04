@@ -4,7 +4,11 @@ import { connect } from "react-redux";
 import GameListItem from "../Components/GameListItem";
 import PlayersActions from "../../../Redux/PlayersRedux";
 import ManageGameActions from "../../../Redux/ManageGameRedux";
+import GamesActions from "../../../Redux/GamesRedux";
+import GeolocationActions from "../../../Redux/GeolocationRedux";
 import LoginAndSignUp from "../Components/LoginAndSignUp";
+import Loading from "../../Waiting/Components/Loading";
+import SortByLocationButton from "../Components/SortByLocationButton";
 import CreateGameButton from "../Components/CreateGameButton";
 import styles from "./Styles/LaunchScreenStyles";
 
@@ -49,6 +53,10 @@ class LaunchScreen extends PureComponent {
           return (
             <View style={styles.sectionHeader}>
               <Text style={styles.sectionHeaderText}>Join</Text>
+              <SortByLocationButton
+                postGeolocation={this.props.postGeolocation}
+                getGames={this.props.getGames}
+              />
             </View>
           );
         break;
@@ -72,12 +80,12 @@ class LaunchScreen extends PureComponent {
   renderRow = ({ item }) => {
     return (
       <GameListItem
-        item={item}
         turn={item.turn}
         id={item.id}
         created={item.created}
         gamePlayers={item.gamePlayers}
         stage={item.stage}
+        distance={item.distance}
         winner={item.winner}
         currentUser={this.props.games.currentUser}
         changeGame={this.props.changeGame}
@@ -128,7 +136,12 @@ class LaunchScreen extends PureComponent {
 
   createGameButton = () => {
     if (this.props.games.currentUser !== null) {
-      return <CreateGameButton createGame={this.props.createGame} />;
+      return (
+        <CreateGameButton
+          createGame={this.props.createGame}
+          postGeolocation={this.props.postGeolocation}
+        />
+      );
     }
   };
 
@@ -148,7 +161,7 @@ class LaunchScreen extends PureComponent {
         {this.createGameButton()}
       </View>
     ) : (
-      <Text>Loading</Text>
+      <Loading />
     );
   }
 
@@ -187,6 +200,12 @@ const mapDispatchToProps = dispatch => {
     },
     signUpPlayer: data => {
       dispatch(PlayersActions.signUpPlayerRequest(data));
+    },
+    getGames: () => {
+      dispatch(GamesActions.getGamesRequest());
+    },
+    postGeolocation: data => {
+      dispatch(GeolocationActions.postGeolocationRequest(data));
     }
   };
 };

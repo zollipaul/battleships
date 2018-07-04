@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { Colors, Metrics } from "../../../Themes/index";
+import { Colors, } from "../../../Themes/index";
 import { Animated } from "react-native";
 
 export default class RocketDown extends Component {
@@ -9,8 +9,8 @@ export default class RocketDown extends Component {
     return (
       <AnimatedRocket
         name={"rocket"}
-        size={50}
-        color={Colors.frost}
+        size={this.props.size}
+        color={Colors.white}
         style={[this.props.style]}
       />
     );

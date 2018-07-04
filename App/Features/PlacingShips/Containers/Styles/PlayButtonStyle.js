@@ -1,24 +1,31 @@
-import { StyleSheet } from 'react-native'
-import { Colors, Metrics } from '../../../../Themes/index'
-import { Fonts } from '../../../../Themes/index'
+import { StyleSheet } from "react-native";
+import { Colors, Metrics } from "../../../../Themes/index";
+import { human } from "react-native-typography";
+import ApplicationStyles from "../../../../Themes/ApplicationStyles";
 
 export default StyleSheet.create({
+  container: {
+    position: "absolute",
+    left: 0,
+    top: 0,
+    right: 0,
+    bottom: Metrics.doubleBaseMargin,
+    justifyContent: "flex-end",
+    alignItems: "center"
+  },
   button: {
-    position: 'absolute',
-    bottom: 20,
-    right: 20,
-    height: 45,
-    borderRadius: 5,
-    justifyContent: 'center',
-    paddingRight: 30,
-    paddingLeft: 30,
-    backgroundColor: Colors.fire,
+    width: 130,
+    height: 50,
+    backgroundColor: Colors.buttonBackground,
+    borderRadius: 25,
+    justifyContent: "center",
+    alignItems: "center",
+    ...ApplicationStyles.shadow
   },
   buttonText: {
+    textAlign: "center",
+    ...human.headlineObject,
     color: Colors.white,
-    textAlign: 'center',
-    fontWeight: 'bold',
-    fontSize: Fonts.size.medium,
     marginVertical: Metrics.baseMargin
   }
-})
+});

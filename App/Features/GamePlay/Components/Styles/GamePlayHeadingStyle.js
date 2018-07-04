@@ -1,21 +1,32 @@
-import { StyleSheet } from 'react-native'
-import { Colors,Fonts } from '../../../../Themes/index'
+import { StyleSheet } from "react-native";
+import { Colors, Metrics } from "../../../../Themes/index";
+import { human } from "react-native-typography";
 
 export default StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    alignItems: "center"
+  },
+  stageContainer: {
+    alignItems: "center"
   },
   turn: {
-    ...Fonts.style.h2,
-    color: Colors.text
+    ...human.title1Object,
+    color: Colors.white
   },
   stage: {
-    fontSize: 14,
-    color: Colors.text
+    ...human.footnoteObject,
+    color: Colors.white
   },
-  hurry: {
-    fontSize: 12,
-    color: Colors.bloodOrange
-
+  hurryView: {
+    marginTop: Metrics.baseMargin,
+    alignItems: "center",
   },
-})
+  hurryText: {
+    ...human.caption1Object,
+    color: Colors.highlight
+  },
+  activityIndicator: {
+    marginTop: Metrics.baseMargin
+  }
+});

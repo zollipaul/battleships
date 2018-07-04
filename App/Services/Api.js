@@ -3,7 +3,7 @@ import apisauce from "apisauce";
 import qs from "qs";
 
 // our "constructor"
-const create = (baseURL = "http://192.168.178.108:8080/api/") => {
+const create = (baseURL = "https://zollipaul-battleships.herokuapp.com/api/") => {
   // const create = (baseURL = 'https://api.github.com/') => {
   // ------
   // STEP 1
@@ -82,6 +82,11 @@ const create = (baseURL = "http://192.168.178.108:8080/api/") => {
       headers: { "content-type": "application/json" }
     });
 
+  const postGeolocation = (mode, coords) =>
+    api.post("/geolocation/" + mode, coords, {
+      headers: { "content-type": "application/json" }
+    });
+
   // ------
   // STEP 3
   // ------
@@ -110,7 +115,8 @@ const create = (baseURL = "http://192.168.178.108:8080/api/") => {
     createGame,
     joinGame,
     postShips,
-    postSalvoes
+    postSalvoes,
+    postGeolocation
   };
 };
 

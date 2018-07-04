@@ -1,16 +1,20 @@
-import { put, select, call } from 'redux-saga/effects'
-import GithubActions, { GithubSelectors } from '../Redux/GithubRedux'
-import { getPlacingShipsGridY } from './PlacingShipsGridPositionSagas'
-import GamesActions from '../Redux/GamesRedux'
-import ShipsActions from '../Redux/ShipsRedux'
-import SalvoActions from '../Redux/SalvoRedux'
-import GameViewActions from '../Redux/GameViewRedux'
+import { put, select, call } from "redux-saga/effects";
+import GithubActions, { GithubSelectors } from "../Redux/GithubRedux";
+import { getPlacingShipsGridY } from "./PlacingShipsGridPositionSagas";
+import GamesActions from "../Redux/GamesRedux";
+import ShipsActions from "../Redux/ShipsRedux";
+import GeolocationActions from "../Redux/GeolocationRedux";
+import SalvoActions from "../Redux/SalvoRedux";
+import GameViewActions from "../Redux/GameViewRedux";
+import Permissions from "react-native-permissions";
+import { Alert } from "react-native";
+import { updateGeoLocation } from './GeolocationSagas'
 
 // // exported to make available for tests
 // export const selectAvatar = GithubSelectors.selectAvatar
 
 // process STARTUP actions
-export function * startup (action) {
+export function* startup(action) {
   // if (__DEV__ && console.tron) {
   //   // straight-up string logging
   //   console.tron.log('Hello, I\'m an example of how to log via Reactotron.')
@@ -37,13 +41,14 @@ export function * startup (action) {
   //   })
   // }
 
-  yield call(getPlacingShipsGridY)
-  yield put(GamesActions.getGamesRequest())
-  yield put(GameViewActions.resetGameView())
+  yield call(getPlacingShipsGridY);
+  yield call(updateGeoLocation);
+  yield put(GamesActions.getGamesRequest());
+  yield put(GameViewActions.resetGameView());
   yield put(ShipsActions.resetAllShips());
   yield put(SalvoActions.resetAllSalvoes());
 
-  console.log('startup')
+  console.log("startup");
 
   // const avatar = yield select(selectAvatar)
   // // only get if we don't have it yet
